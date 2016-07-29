@@ -10,8 +10,20 @@ class AttendanceModel extends CI_Model
         $this->db->insert('attendance',$data);
         return $this->db->insert_id();
     }
-    public function checkout($data)
+    public function checkout($staffId, $date, $timeout)
     {
+        $data = array('time_out' => $timeout);
+        $this->db->where('staff_id',$staffId)
+                ->where('date',$date);
+        $this->db->update('attendance',$data);
+        return $this->db->insert_id();
+    }
+    public function insertCheckout($staffId, $date, $timeout)
+    {
+        $data = array(  'staff_id'=> $staffId, 
+                        'date' => $date,
+                        'time_out' => $timeout
+                     );
         $this->db->insert('attendance',$data);
         return $this->db->insert_id();
     }
@@ -26,13 +38,13 @@ class AttendanceModel extends CI_Model
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            $attendanceId = 0;
+            $attendance = $query->result();
         }
         else 
         {
-            $attendanceId = -1;
+            $attendance = null;
         }
-        return $attendanceId;
+        return $attendance;
     }
 }
 ?>
