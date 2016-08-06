@@ -5,27 +5,53 @@ class AttendanceModel extends CI_Model
     {
         $this->load->database();
     }
-    public function checkin($data)
+    public function checkin($staffId, $date, $shiftId, $timein)
     {
-        $this->db->insert('attendance',$data);
-        return $this->db->insert_id();
+        $data = array(
+                        'staff_id' => $staffId,
+                        'date' => $date,
+                        'shift_id' => $shiftId,
+                        'time_in' => $timein
+            );
+            var_dump($data);
+            return $this->attendanceInsert($data);
     }
-    public function checkout($staffId, $date, $timeout)
+    
+    
+    public function checkout($staffId, $date, $shiftId, $timeout)
     {
         $data = array('time_out' => $timeout);
         $this->db->where('staff_id',$staffId)
-                ->where('date',$date);
-        $this->db->update('attendance',$data);
-        return $this->db->insert_id();
+                ->where('date',$date)
+                ->where('shift_id',$shiftId);
+        $success = $this->db->update('attendance',$data);
+        echo "\n---------------------------------" . $success ;
+        echo "-----------------------------------\n";
+        if ($success == 1) 
+        {
+            return $this->db->affected_rows();
+        } 
+        else 
+        {
+            
+            ///$this->db->_error_message()
+            return -1; // Or do whatever you gotta do here to raise an error
+        }
+        
+        // if($this->db->affected_rows() > 0)
+        // {
+        //     return true;
+        // }
+        // return false;
     }
+    
     public function insertCheckout($staffId, $date, $timeout)
     {
         $data = array(  'staff_id'=> $staffId, 
                         'date' => $date,
                         'time_out' => $timeout
                      );
-        $this->db->insert('attendance',$data);
-        return $this->db->insert_id();
+        return $this->attendanceInsert($data);
     }
     public function isCheckedInAlready($staffId, $date)
     {
@@ -46,5 +72,13 @@ class AttendanceModel extends CI_Model
         }
         return $attendance;
     }
+    
+    
+    private function attendanceInsert($data)
+    {
+        $this->db->insert('attendance',$data);
+        return $this->db->insert_id();
+    }
+    
 }
 ?>
