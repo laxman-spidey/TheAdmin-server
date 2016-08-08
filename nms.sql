@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   PRIMARY KEY (`attendance_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
-
 -- --------------------------------------------------------
 
 --
@@ -46,10 +45,10 @@ CREATE TABLE IF NOT EXISTS `attendance` (
 --
 
 CREATE TABLE IF NOT EXISTS `leave` (
-  `leave_id` int(11) NOT NULL,
+  `leave_id` int(11) NOT NULL AUTO_INCREMENT,
   `staff_id` int(11) NOT NULL,
   `leave_status` int(1) NOT NULL,
-  `leave_submission_date` datetime NOT NULL,
+  `leave_submission_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `leave_date` date NOT NULL,
   `comment` varchar(200) NOT NULL,
   `leave_type_id` int(11) NOT NULL,
@@ -57,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `leave` (
   KEY `staff_id` (`staff_id`),
   KEY `staff_id_2` (`staff_id`),
   KEY `leave_type_id` (`leave_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -71,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `leave_type` (
   `note` varchar(60) NOT NULL,
   PRIMARY KEY (`leave_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -170,7 +170,6 @@ ALTER TABLE `attendance`
 -- Constraints for table `leave`
 --
 ALTER TABLE `leave`
-  ADD CONSTRAINT `leave_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `attendance` (`attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `leave_ibfk_2` FOREIGN KEY (`leave_type_id`) REFERENCES `leave_type` (`leave_type_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -211,3 +210,31 @@ INSERT INTO `attendance` (`attendance_id`, `staff_id`, `shift_id`, `date`, `time
 (3, 4, 1, '0000-00-00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (4, 5, 1, '0000-00-00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (5, 6, 1, '0000-00-00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+
+
+--
+-- Dumping data for table `leave_type`
+--
+
+INSERT INTO `leave_type` (`leave_type_id`, `leave_type`, `note`) VALUES
+(1, 'earned leave', 'null');
+--
+-- Dumping data for table `leave`
+--
+
+INSERT INTO `leave` (`leave_id`, `staff_id`, `leave_status`, `leave_submission_date`, `leave_date`, `comment`, `leave_type_id`) VALUES
+(2, 6, 0, '0000-00-00 00:00:00', '0000-00-00', '', 1),
+(3, 6, 0, '0000-00-00 00:00:00', '0000-00-00', '', 1),
+(4, 6, 0, '0000-00-00 00:00:00', '0000-00-00', '', 1),
+(5, 6, 0, '0000-00-00 00:00:00', '0000-00-00', '', 1),
+(6, 6, 0, '0000-00-00 00:00:00', '0000-00-00', '', 1),
+(7, 6, 0, '2016-08-07 07:33:38', '0000-00-00', '', 1),
+(8, 6, 1, '2016-08-07 07:35:04', '2016-08-07', '', 1),
+(9, 6, 1, '2016-08-07 07:46:48', '2016-08-08', '', 1),
+(10, 6, 1, '2016-08-07 07:47:02', '2016-08-10', '', 1),
+(11, 6, 1, '2016-08-07 07:47:13', '2016-08-11', '', 1),
+(12, 6, 0, '2016-08-07 07:47:22', '2016-08-12', '', 1);
+
+
+
