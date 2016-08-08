@@ -25,15 +25,12 @@ class AttendanceModel extends CI_Model
                 ->where('date',$date)
                 ->where('shift_id',$shiftId);
         $success = $this->db->update('attendance',$data);
-        echo "\n---------------------------------" . $success ;
-        echo "-----------------------------------\n";
         if ($success == 1) 
         {
             return $this->db->affected_rows();
         } 
         else 
         {
-            
             ///$this->db->_error_message()
             return -1; // Or do whatever you gotta do here to raise an error
         }

@@ -31,11 +31,6 @@ class Welcome extends CI_Controller {
 		//$request = getRequestData();
 		$request = $this->createDummyCheckinRequest();
 		$this->setRequestCodeHeaderToResponse();
-		//Extract: build data key,value pairs for inserting
-		$data = array();
-		$data["staff_id"] = $request->staffId;
-		$data["date"] = $request->date;
-		$data["time_in"] = $request->timeIn;
 		
 		//load Attendance model
 		$this->load->model('AttendanceModel');
@@ -49,7 +44,6 @@ class Welcome extends CI_Controller {
 		else
 		{
 			$attendanceId = $this->AttendanceModel->checkin($request->staffId, $request->date, $request->shiftId, $request->timeIn);	
-			echo "\nattendanceId ". $attendanceId;
 			if($attendanceId > 0)
 			{
 				$this->setResultCode(100);
@@ -89,7 +83,7 @@ class Welcome extends CI_Controller {
 			{
 				
 			}
-		}
+	}	
 		else 
 		{	
 			$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
@@ -117,7 +111,7 @@ class Welcome extends CI_Controller {
 		$request["shiftId"] = 1;
 		$request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeIn"] = date("Y-m-d H:i:s");//"08:00:00";
-		var_dump($request);
+		//var_dump($request);
 		return Json_decode(json_encode($request));
 	}
 	
@@ -130,7 +124,7 @@ class Welcome extends CI_Controller {
 		$request["shiftId"] = 1;
 		$request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeOut"] = date("Y-m-d H:i:s");//"08:00:00";
-		var_dump($request);
+		//var_dump($request);
 		return Json_decode(json_encode($request));
 	}
 	
