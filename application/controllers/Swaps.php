@@ -26,108 +26,65 @@ class Swaps extends CI_Controller {
 		$this->load->view('welcome_message');
 	}
 	
+	public function showswap()
+	{
+		echo "showswap";
+		//$request = $this->getRequestData();
+		$request = $this->createSwapDummyRequest();
+		$this->setRequestCodeHeaderToResponse(601);
+		$response = array();
+		$this->load->model('SwapModel');
+		$showSwap = $this->SwapModel->availableSwap( $request->swapDate,$request->shiftId);
+		if($showSwap != null)
+		{
+			//var_dump($leaves);
+			$response["count"] = count($showSwap);
+			$response["showSwap"] = array();
+			$index = 0;
+			
+			foreach($showSwap as $swap)
+			{
+			    $response["showSwap"][$index]["staffId"] = $swap->staff_id;
+			    $index++;
+			}
+			$this->setResultCode(602);
+			$response["msg"] = "swap is available "; //.$attendance[0]->time_in;
+		}
+		else
+		{
+			$this->setResultCode(603);
+			$response["msg"] = "No swap is available.";
+		}
+		
+		echo json_encode($response);
+		
+	}
 	public function applyswap()
 	{
 		echo "applyswap";
 		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest();
-		$this->setRequestCodeHeaderToResponse(301);
+		$request = $this->createApplySwapDummyRequest();
+		$this->setRequestCodeHeaderToResponse(604);
 		$response = array();
 		$this->load->model('SwapModel');
-		$applyleave = $this->SwapModel->isOnLeaveAlready($request->staffId, $request->leaveDate);
-		if($applyleave != -1)
+		$applyswap = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate );
+		if($applyswap != -1)
 		{
-			$this->setResultCode(301);
-			$response["msg"] = "You are already on leave "; //.$attendance[0]->time_in;
+			echo " swapid:.$applyswap." ;
+		    $this->setResultCode(605);
+				$response["msg"] = "swap request submitted Successfully.";
 		}
+		
 		else
 		{
-		    
-			$LeaveId = $this->LeaveModel->insertLeave($request->staffId, $request->leaveDate, $request->leaveTypeID);	
-			echo "\nLeaveId ". $LeaveId;
-			if($LeaveId > 0)
-			{
-				$this->setResultCode(302);
-				$response["msg"] = "leave applied succesfully.";
-			}
-			else
-			{
-				$this->setResultCode(303);
-				$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
-			}
+				echo " swapid:.$applyswap." ;
+		  	$this->setResultCode(606);
+			$response["msg"] = "swap request submission failed.";
+			
 		}
 		echo json_encode($response);
-		
+	}
 
-		
-	}
-	public function checkleave()
-	{
-		echo "checkleave";
-		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest1();
-		$this->setRequestCodeHeaderToResponse(401);
-		$response = array();
-		$this->load->model('LeaveModel');
-		$leaves = $this->LeaveModel->countLeave($request->staffId, $request->listLimit,$request->status );
-		if($leaves != null)
-		{
-		    //var_dump($leaves);
-			$this->setResultCode(402);
-			$response["count"] = count($leaves);
-			$response["leaves"] = array();
-			$index = 0;
-			
-			foreach($leaves as $leave)
-			{
-			    $response["leaves"][$index]["date"] = $leave->leave_date;
-			    $index++;
-			}
-			//$response["msg"] = "You have these many leaves "; //.$attendance[0]->time_in;
-		}
-		
-		else
-		{
-		  	$this->setResultCode(403);
-			$response["count"] = 0; //.$attendance[0]->time_in;
-			
-		}
-		echo json_encode($response);
-	}
-	public function leavesSummary()
-	{
-	   echo "leavesSummary";
-		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest2();
-		
-		$this->setRequestCodeHeaderToResponse(501);
-		$this->load->model('LeaveModel');
-		$leavesData = $this->LeaveModel->leaveSummary($request->staffId);
-			if($leavesData != null)
-		{
-		    //var_dump($leaves);
-			$this->setResultCode(502);
-			$response["count"] = count($leavesData);
-			$response["leavesData"] = array();
-			$index = 0;
-			
-			foreach($leavesData as $leave)
-			{
-			    $response["leavesData"][$index]["count"] = $leave->count;
-			    $response["leavesData"][$index]["leaveStatus"] = $leave->leave_status;
-			    $index++;
-			}
-			//$response["msg"] = "You have these many leaves "; //.$attendance[0]->time_in;
-		}
-		
-		else
-		{
-		  	$this->setResultCode(503);
-			$response["count"] = 0; //.$attendance[0]->time_in;
-			
-		}
-		echo json_encode($response);
-	}
 	
 	
 	private function getRequestData()
@@ -147,34 +104,26 @@ class Swaps extends CI_Controller {
 	}
 	
 	/* creates dummy Leave request */
-	private function createLeaveDummyRequest()
+	private function createSwapDummyRequest()
 	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "300";
+		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
 		$request = array();
-		$request["staffId"] = 6;
-		$request["leaveDate"] = "2016-08-12";
- 		$request["leaveTypeID"] = 1;
+		$request["swapDate"] = "2016-08-01";
+		$request["shiftId"] = 1;
+ 	
 		
 		return Json_decode(json_encode($request));
 	}
-	private function createLeaveDummyRequest1()
+	private function createApplySwapDummyRequest()
 	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "400";
+		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
 		$request = array();
-		$request["staffId"] = 6;
-		$request["listLimit"] = 10;
- 		$request["status"] = 0; //completed , pending
-		return Json_decode(json_encode($request));
-		
-	}
-	private function createLeaveDummyRequest2()
-	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "500";
-		$request = array();
-		$request["staffId"] = 6;
+		$request["reqRoasterId"] = 1;
+		$request["reqShiftId"] = 1;
+		$request["reqSwapDate"] = '2016-08-01';
+ 	
 		
 		return Json_decode(json_encode($request));
-		
 	}
 	
 }
