@@ -9,7 +9,7 @@ class SwapModel extends CI_Model
     }
     
     
-    public function applySwap($reqRoasterId,$reqShiftId,$reqSwapDate)
+    public function applySwap($reqRoasterId,$reqShiftId,$reqSwapDate,$reqSwapTo)
     {
         //echo "------------------".$leaveTypeID."----------";
         $data = array(
@@ -20,7 +20,23 @@ class SwapModel extends CI_Model
             );
         $this->db->insert('swap_request',$data);
         $swapId = $this->db->insert_id();
-        return $swapId;
+        
+        //sent to table
+        $data1 = array(
+            'staff_id_sent_to' => $reqSwapTo,
+            'swap_id' => $swapId
+            );
+        $this->db->insert('swap_request_sent',$data1);
+        $swapIdto = $this->db->insert_id();
+        
+        if($swapId > 0  && $swapIdto > 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
     }
     
     public function availableSwap( $swapDate,$shiftId)

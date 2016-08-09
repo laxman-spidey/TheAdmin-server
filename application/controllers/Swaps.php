@@ -67,17 +67,17 @@ class Swaps extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse(604);
 		$response = array();
 		$this->load->model('SwapModel');
-		$applyswap = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate );
-		if($applyswap != -1)
+		$success = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate, $request->reqSwapTo );
+		if($success == 0)
 		{
-			echo " swapid:.$applyswap." ;
+			
 		    $this->setResultCode(605);
 				$response["msg"] = "swap request submitted Successfully.";
 		}
 		
 		else
 		{
-				echo " swapid:.$applyswap." ;
+				
 		  	$this->setResultCode(606);
 			$response["msg"] = "swap request submission failed.";
 			
@@ -121,6 +121,7 @@ class Swaps extends CI_Controller {
 		$request["reqRoasterId"] = 1;
 		$request["reqShiftId"] = 1;
 		$request["reqSwapDate"] = '2016-08-01';
+		$request["reqSwapTo"] = 2;
  	
 		
 		return Json_decode(json_encode($request));
