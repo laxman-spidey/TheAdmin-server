@@ -176,7 +176,7 @@ ALTER TABLE `leave`
 -- Constraints for table `roaster`
 --
 ALTER TABLE `roaster`
-  ADD CONSTRAINT `roaster_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `attendance` (`attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  -- ADD CONSTRAINT `roaster_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `attendance` (`attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `roaster_ibfk_2` FOREIGN KEY (`shift_id`) REFERENCES `shift` (`shift_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -191,8 +191,8 @@ ALTER TABLE `swap_request`
 -- Constraints for table `swap_request_sent`
 --
 ALTER TABLE `swap_request_sent`
-  ADD CONSTRAINT `swap_request_sent_ibfk_1` FOREIGN KEY (`swap_id`) REFERENCES `swap_request` (`swap_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `swap_request_sent_ibfk_2` FOREIGN KEY (`staff_id_sent_to`) REFERENCES `attendance` (`attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `swap_request_sent_ibfk_1` FOREIGN KEY (`swap_id`) REFERENCES `swap_request` (`swap_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  -- ADD CONSTRAINT `swap_request_sent_ibfk_2` FOREIGN KEY (`staff_id_sent_to`) REFERENCES `attendance` (`attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
