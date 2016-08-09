@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `leave` (
 --
 
 CREATE TABLE IF NOT EXISTS `leave_type` (
-  `leave_type_id` int(11) NOT NULL,
+  `leave_type_id` int(11) NOT NULL AUTO_INCREMENT,
   `leave_type` varchar(20) NOT NULL,
   `note` varchar(60) NOT NULL,
   PRIMARY KEY (`leave_type_id`)
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `leave_type` (
 --
 
 CREATE TABLE IF NOT EXISTS `roaster` (
-  `roaster_id` int(11) NOT NULL,
+  `roaster_id` int(11) NOT NULL AUTO_INCREMENT,
   `staff_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `shift_id` int(11) NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `roaster` (
 --
 
 CREATE TABLE IF NOT EXISTS `shift` (
-  `shift_id` int(11) NOT NULL,
+  `shift_id` int(11) NOT NULL AUTO_INCREMENT,
   `shift` varchar(10) NOT NULL,
   `description` varchar(20) NOT NULL,
   `time_in` time NOT NULL,
@@ -121,7 +121,7 @@ INSERT INTO `shift` (`shift_id`, `shift`, `description`, `time_in`, `time_out`) 
 --
 
 CREATE TABLE IF NOT EXISTS `swap_request` (
-  `swap_id` int(11) NOT NULL,
+  `swap_id` int(11) NOT NULL AUTO_INCREMENT,
   `roaster_id_requested` int(11) NOT NULL,
   `shift_id_requested` int(11) NOT NULL,
   `request_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `swap_request` (
 --
 
 CREATE TABLE IF NOT EXISTS `swap_request_sent` (
-  `swap_request_sent_id` int(11) NOT NULL,
+  `swap_request_sent_id` int(11) NOT NULL AUTO_INCREMENT,
   `swap_id` int(11) NOT NULL,
   `staff_id_sent_to` int(11) NOT NULL,
   PRIMARY KEY (`swap_request_sent_id`),
@@ -235,6 +235,24 @@ INSERT INTO `leave` (`leave_id`, `staff_id`, `leave_status`, `leave_submission_d
 (10, 6, 1, '2016-08-07 07:47:02', '2016-08-10', '', 1),
 (11, 6, 1, '2016-08-07 07:47:13', '2016-08-11', '', 1),
 (12, 6, 0, '2016-08-07 07:47:22', '2016-08-12', '', 1);
+
+
+--
+-- Dumping data for table `roaster`
+--
+
+INSERT INTO `roaster` (`roaster_id`, `staff_id`, `date`, `shift_id`, `swap_status`, `original_shift_id`) VALUES
+(1, 1, '2016-08-01', 2, 0, 2),
+(2, 2, '2016-08-01', 3, 0, 3);
+
+--
+-- Dumping data for table `swap_request`
+--
+
+INSERT INTO `swap_request` (`swap_id`, `roaster_id_requested`, `shift_id_requested`, `request_timestamp`, `swap_status`, `roaster_id_accepted`) VALUES
+(1, 1, 1, '2016-08-09 16:12:27', 0, 1);
+
+
 
 
 
