@@ -59,34 +59,116 @@ class Swaps extends CI_Controller {
 		echo json_encode($response);
 		
 	}
-	public function applyswap()
+	// public function applyswap()
+	// {
+	// 	echo "applyswap";
+	// 	//$request = $this->getRequestData();
+	// 	$request = $this->createApplySwapDummyRequest();
+	// 	$this->setRequestCodeHeaderToResponse(604);
+	// 	$response = array();
+	// 	$this->load->model('SwapModel');
+	// 	$success = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate, $request->reqSwapTo );
+	// 	if($success == 0)
+	// 	{
+			
+	// 	    $this->setResultCode(605);
+	// 			$response["msg"] = "swap request submitted Successfully.";
+	// 	}
+		
+	// 	else
+	// 	{
+				
+	// 	  	$this->setResultCode(606);
+	// 		$response["msg"] = "swap request submission failed.";
+			
+	// 	}
+	// 	echo json_encode($response);
+	// }
+// public function swapeligibility()
+// 	{
+// 		echo "swapeligibility";
+// 		//$request = $this->getRequestData();
+// 		$request = $this->createSwapEligibilityDummyRequest();
+// 		$this->setRequestCodeHeaderToResponse(607);
+// 		$response = array();
+// 		$this->load->model('SwapModel');
+// 		$eligibility = $this->SwapModel->swapEligibility($request->staffId);
+// 		if($eligibility != null)
+// 		{
+			
+// 		    $this->setResultCode(608);
+// 				$response["msg"] = "Eligible for swapping.";
+// 		}
+		
+// 		else
+// 		{
+				
+// 		  	$this->setResultCode(609);
+// 			$response["msg"] = "you have crossed the swap limit.";
+			
+// 		}
+// 		echo json_encode($response);
+// 	}
+		public function applyswapeligibility()
 	{
-		echo "applyswap";
+		echo "applyswapeligibility";
 		//$request = $this->getRequestData();
-		$request = $this->createApplySwapDummyRequest();
+		$request = $this->createApplySwapDummyRequest1();
 		$this->setRequestCodeHeaderToResponse(604);
 		$response = array();
 		$this->load->model('SwapModel');
-		$success = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate, $request->reqSwapTo );
-		if($success == 0)
+		$eligibility = $this->SwapModel->swapEligibility( $request->staffId);
+		if($eligibility != null)
 		{
-			
-		    $this->setResultCode(605);
+			$response["msg"] = "Eligible for swapping.";
+		    $success = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate, $request->reqSwapTo );
+		    if($success == 0)
+		    {
+		    	$this->setResultCode(605);
 				$response["msg"] = "swap request submitted Successfully.";
+		    }
+		    else{
+		    	$this->setResultCode(606);
+				$response["msg"] = "swap request submission failed.";
+		    }
+				
 		}
 		
 		else
 		{
 				
 		  	$this->setResultCode(606);
-			$response["msg"] = "swap request submission failed.";
+			$response["msg"] = "Your swaps for this month are completed.";
 			
 		}
 		echo json_encode($response);
 	}
-
 	
-	
+	 public function swapstatus()
+	{
+		echo "swapstatus";
+		//$request = $this->getRequestData();
+		$request = $this->createSwapStatusDummyRequest();
+		$this->setRequestCodeHeaderToResponse(604);
+		$response = array();
+		$this->load->model('SwapModel');
+		$swapStatus = $this->SwapModel->swapStatus( $request->swapStatus,$request->acceptStaffId,$request->reqRoasterId,$request->reqSwapDate,$request->acceptRoasterId,$request->reqSwapId);
+		if($swapStatus == 0)
+		{
+			
+		    $this->setResultCode(605);
+				$response["msg"] = "swap status updated Successfully.";
+		}
+		
+		else
+		{
+				
+		  	$this->setResultCode(606);
+			$response["msg"] = "swap status updation failed.";
+			
+		}
+		echo json_encode($response);
+	}
 	private function getRequestData()
 	{
 		$postdata = file_get_contents("php://input");
@@ -124,6 +206,37 @@ class Swaps extends CI_Controller {
 		$request["reqSwapTo"] = 2;
  	
 		
+		return Json_decode(json_encode($request));
+	}
+		private function createSwapEligibilityDummyRequest()
+	{
+		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
+		$request = array();
+		$request["staffId"] = 1;
+		return Json_decode(json_encode($request));
+	}
+	private function createApplySwapDummyRequest1()
+	{
+		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
+		$request = array();
+		$request["reqRoasterId"] = 1;
+		$request["reqShiftId"] = 1;
+		$request["reqSwapDate"] = '2016-08-01';
+		$request["reqSwapTo"] = 2;
+ 		$request["staffId"] = 1;
+		
+		return Json_decode(json_encode($request));
+	}
+		private function createSwapStatusDummyRequest()
+	{
+		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
+		$request = array();
+		$request["swapStatus"] = 5;
+ 		$request["acceptStaffId"] = 2;
+		$request["reqSwapDate"] = '2016-08-01';
+		$request["reqRoasterId"] = 1;
+		$request["acceptRoasterId"] = 2;
+		$request["reqSwapId"] = 1;
 		return Json_decode(json_encode($request));
 	}
 	
