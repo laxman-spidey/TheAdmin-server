@@ -25,6 +25,16 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+	public function experiment()
+	{
+		$request = $this->createDummyHistoryRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('Attendance');
+		$response = $this->attendance->getAttendanceHistory($request);
+		$this->setResultCode($response["responseCode"]);
+		$this->setSuccess($response["success"]);
+		echo json_encode($response["data"]);
+	}
 	
 	public function checkin()
 	{
@@ -83,7 +93,7 @@ class Welcome extends CI_Controller {
 			{
 				
 			}
-	}	
+		}	
 		else 
 		{	
 			$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
@@ -100,6 +110,41 @@ class Welcome extends CI_Controller {
 			
 		}
 		echo json_encode($response);
+	}
+	
+	public function getAttendanceHistory()
+	{
+		$request = $this->getRequestData();
+		//$request = $this->createDummyHistoryRequest();
+		$this->setRequestCodeHeaderToResponse();
+		//Extract: build data key,value pairs for inserting
+		$response = array();
+		
+		//load Attendance model
+		$this->load->model('AttendanceModel');
+		$history = $this->AttendanceModel->getHistory($request->staffId, $request->limit);
+		if($history == null)
+		{
+			$this->setResultCode(107);
+			$this->setSuccess("false");
+			$response['msg'] = "No records found";
+		}
+		else {
+			$response["count"] = count($history);
+			$response["history"] = array();
+			$index = 0;
+			
+			foreach($history as $row)
+			{
+			    $response["history"][$index]["date"] = $row->date;
+			    $response["history"][$index]["timeIn"] = $row->time_in;
+			    $response["history"][$index]["timeOut"] = $row->time_out;
+			    $index++;
+			}
+			
+		}
+		echo json_encode($response);
+		
 	}
 	
 	/* creates dummy checkin request */
@@ -127,6 +172,16 @@ class Welcome extends CI_Controller {
 		//var_dump($request);
 		return Json_decode(json_encode($request));
 	}
+	/* creates dummy checkin request */
+	private function createDummyHistoryRequest()
+	{
+		$_SERVER[$this->TAG_REQUEST_CODE] = "102";
+		$request = array();
+		$request["staffId"] = 6;
+		$request["limit"] = 3;
+		//var_dump($request);	
+		return Json_decode(json_encode($request));
+	}
 	
 	private function getRequestData()
 	{
@@ -136,7 +191,15 @@ class Welcome extends CI_Controller {
 	
 	private function setRequestCodeHeaderToResponse()
 	{
-		header("$this->TAG_REQUEST_CODE: " . 100 . "");
+		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);
+		// var_dump($requestCodeArray);
+		// $requestCode = $requestCodeArray[0];
+		// echo "---------------------------- $requestCode ----------------------";
+		header("$this->TAG_REQUEST_CODE: " . $_SERVER['HTTP_REQUESTCODE']  . "");
+	}
+	private function setSuccess($success)
+	{
+		header("success:".$success);
 	}
 	private function setResultCode($resultCode)
 	{				
