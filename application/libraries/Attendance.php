@@ -24,7 +24,15 @@ class Attendance {
 		//load Attendance model
 		//$this->load->model('AttendanceModel');
 		$attendanceModel = $this->loadModel('AttendanceModel');
-		$history = $attendanceModel->getHistory($request->staffId, $request->limit);
+		$history = null;
+		if(isset($request->from) && isset($request->to))
+		{
+			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->from, $request->to);	
+		}
+		else
+		{
+			$history = $attendanceModel->getHistory($request->staffId, $request->limit);
+		}
 		$response['success'] = false;
 		$response['responseCode'] = 0;
 		$data = array();

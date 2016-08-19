@@ -83,3 +83,18 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+/* 
+*   application specific Success and Error codes
+*/
+
+// Top level constants
+defined('PRO_SUCCESS')          OR define('PRO_SUCCESS', TRUE); // Request successfully proccessed.
+defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request processing failed.
+
+// Response Codes
+defined('LOGIN_SUCCESS')    OR define('LOGIN_SUCCESS', 100); // Request successfully proccessed.
+defined('PHONE_NUM_DOES_NOT_EXISTS')    OR define('PHONE_NUM_DOES_NOT_EXISTS', 101); // Request successfully proccessed.
+
+
