@@ -77,5 +77,33 @@ class AttendanceModel extends CI_Model
         return $this->db->insert_id();
     }
     
+    public function getHistory($staffId, $limit, $fromDate = null, $toDate = null)
+    {
+        $this->db->select('date, time_in, time_out')
+                ->from('attendance')
+                ->where('staff_id', $staffId)
+                ->order_by('date','desc')
+                ->limit($limit);
+        if($fromDate != null)
+        {
+            $this->db->where('date >=', $fromDate);
+        }
+        if($toDate != null)
+        {
+            $this->db->where('date <=', $toDate);
+        }
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $history = $query->result();
+        }
+        else 
+        {
+            $history = null;
+        }
+        return $history;
+        
+    }
+    
 }
 ?>

@@ -74,15 +74,6 @@ class Leaves extends CI_Controller {
 		{
 		    //var_dump($leaves);
 			$this->setResultCode(402);
-			$response["count"] = count($leaves);
-			$response["leaves"] = array();
-			$index = 0;
-			
-			foreach($leaves as $leave)
-			{
-			    $response["leaves"][$index]["date"] = $leave->leave_date;
-			    $index++;
-			}
 			//$response["msg"] = "You have these many leaves "; //.$attendance[0]->time_in;
 		}
 		

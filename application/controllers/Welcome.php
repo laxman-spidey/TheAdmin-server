@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
 	
+	public $TAG_HTTP_REQUEST_CODE = "HTTP_REQUESTCODE";
 	public $TAG_REQUEST_CODE = "requestCode";
 	public $TAG_RESULT_CODE = "resultCode";
 
@@ -25,19 +26,40 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+	public function getAttendanceHistory()
+	{
+		//$request = $this->createDummyHistoryRequest();
+		$request = $this->getRequestData();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('Attendance');
+		$response = $this->attendance->getAttendanceHistory($request);
+		$this->setResultCode($response["responseCode"]);
+		$this->setSuccess($response["success"]);
+		echo json_encode($response["data"]);
+	}	
 	
+	
+	/*
+	*	@url:		/welcome/checkin
+	*	@function:	when the user is entered work location and checks in the time for the day.
+	*	@type:		POST
+	*	@requestCode:  
+	*	@in-params: staffId, shiftId, date, timeIn 
+	*	@responseCodes: 
+	*	
+	*/
 	public function checkin()
 	{
 		//$request = getRequestData();
 		$request = $this->createDummyCheckinRequest();
 		$this->setRequestCodeHeaderToResponse();
 		
-		//load Attendance model
+		
 		$this->load->model('AttendanceModel');
-		$attendance = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
-		//var_dump($attendance);
-		if($attendance != null)
+		$checkedInAlready = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
+		if($checkedInAlready != null)
 		{
+			//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
 			$this->setResultCode(101);
 			$response["msg"] = "You have already checked in at " .$attendance[0]->time_in;
 		}
@@ -83,7 +105,7 @@ class Welcome extends CI_Controller {
 			{
 				
 			}
-	}	
+		}	
 		else 
 		{	
 			$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
@@ -101,7 +123,42 @@ class Welcome extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-	
+	/*
+	public function getAttendanceHistory()
+	{
+		$request = $this->getRequestData();
+		//$request = $this->createDummyHistoryRequest();
+		$this->setRequestCodeHeaderToResponse();
+		//Extract: build data key,value pairs for inserting
+		$response = array();
+		
+		//load Attendance model
+		$this->load->model('AttendanceModel');
+		$history = $this->AttendanceModel->getHistory($request->staffId, $request->limit);
+		if($history == null)
+		{
+			$this->setResultCode(107);
+			$this->setSuccess("false");
+			$response['msg'] = "No records found";
+		}
+		else {
+			$response["count"] = count($history);
+			$response["history"] = array();
+			$index = 0;
+			
+			foreach($history as $row)
+			{
+			    $response["history"][$index]["date"] = $row->date;
+			    $response["history"][$index]["timeIn"] = $row->time_in;
+			    $response["history"][$index]["timeOut"] = $row->time_out;
+			    $index++;
+			}
+			
+		}
+		echo json_encode($response);
+		
+	}
+	*/
 	/* creates dummy checkin request */
 	private function createDummyCheckinRequest()
 	{
@@ -127,6 +184,20 @@ class Welcome extends CI_Controller {
 		//var_dump($request);
 		return Json_decode(json_encode($request));
 	}
+	/* creates dummy checkin request */
+	private function createDummyHistoryRequest()
+	{
+		$_SERVER[$this->TAG_REQUEST_CODE] = "102";
+		$request = array();
+		$request["staffId"] = 6;
+		$request["limit"] = 3;
+		$request["fromDate"] = '2016-08-17';
+		$request["toDate"] = '2016-08-19';
+		
+		
+		//var_dump($request);	
+		return Json_decode(json_encode($request));
+	}
 	
 	private function getRequestData()
 	{
@@ -136,7 +207,15 @@ class Welcome extends CI_Controller {
 	
 	private function setRequestCodeHeaderToResponse()
 	{
-		header("$this->TAG_REQUEST_CODE: " . 100 . "");
+		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);
+		// var_dump($requestCodeArray);
+		// $requestCode = $requestCodeArray[0];
+		// echo "---------------------------- $requestCode ----------------------";
+		header("$this->TAG_REQUEST_CODE: " . $_SERVER['HTTP_REQUESTCODE']  . "");
+	}
+	private function setSuccess($success)
+	{
+		header("success:".$success);
 	}
 	private function setResultCode($resultCode)
 	{				
