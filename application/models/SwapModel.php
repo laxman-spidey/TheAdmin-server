@@ -92,6 +92,7 @@ class SwapModel extends CI_Model
     //     return $eligibility;
     // }
         public function swapEligibility($staffId)
+        
     {
         $this->db->select("count(*) as count")
                 ->from('roaster')
