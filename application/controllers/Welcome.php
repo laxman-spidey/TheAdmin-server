@@ -6,6 +6,7 @@ class Welcome extends CI_Controller {
 	public $TAG_HTTP_REQUEST_CODE = "HTTP_REQUESTCODE";
 	public $TAG_REQUEST_CODE = "requestCode";
 	public $TAG_RESULT_CODE = "resultCode";
+	public $WEEKOFF_SHIFTID = '4';
 
 	/**
 	 * Index Page for this controller.
@@ -92,66 +93,81 @@ class Welcome extends CI_Controller {
 
 		$this->load->model('AttendanceModel');
 		$roaster = $this->AttendanceModel->checkRoaster($request->staffId, $request->date);
-		if($roaster != null)
+		if($roaster != null )
 		{
-			$checkedInAlready = $this->AttendanceModel->isCheckedInAlready($roaster->roaster_id);
-			if($checkedInAlready != null)
+			//handling if the user is on week off
+			if($roaster->shift_id != $this->AttendanceModel->WEEKOFF_SHIFTID)
 			{
-				//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
-				$this->setResultCode(101);
-				$response["msg"] = "You have already checked in at " .$checkedInAlready[0]->time_in;
-			}
-			else
-			{
-				$attendanceId = $this->AttendanceModel->checkin($roaster->roaster_id,  $request->timeIn);	
-				if($attendanceId > 0)
+				echo "roaster id fetched";
+				$checkedInAlready = $this->AttendanceModel->isCheckedInAlready($roaster->roaster_id);
+				if($checkedInAlready != null)
 				{
-					$this->setResultCode(100);
-					$response["msg"] = "Attendance registered Successfully.";
+					//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
+					$this->setResultCode(101);
+					$response["msg"] = "You have already checked in at " .$checkedInAlready[0]->time_in;
 				}
 				else
 				{
-					$this->setResultCode(102);
-					$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
+					$attendanceId = $this->AttendanceModel->checkin($roaster->roaster_id,  $request->timeIn);	
+					if($attendanceId > 0)
+					{
+						$this->setResultCode(100);
+						$response["msg"] = "Attendance registered Successfully.";
+					}
+					else
+					{
+						$this->setResultCode(102);
+						$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
+					}
 				}
-			}
-		}	
-		
-		echo json_encode($response);
-		
-	}
-	
-	public function checkin1()
-	{
-		//$request = getRequestData();
-		$request = $this->createDummyCheckinRequest();
-		$this->setRequestCodeHeaderToResponse();
-		
-		
-		$this->load->model('AttendanceModel');
-		$checkedInAlready = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
-		if($checkedInAlready != null)
-		{
-			//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
-			$this->setResultCode(101);
-			$response["msg"] = "You have already checked in at " .$checkedInAlready[0]->time_in;
-		}
-		else
-		{
-			$attendanceId = $this->AttendanceModel->checkin($request->staffId, $request->date,  $request->timeIn);	
-			if($attendanceId > 0)
-			{
-				$this->setResultCode(100);
-				$response["msg"] = "Attendance registered Successfully.";
 			}
 			else
 			{
-				$this->setResultCode(102);
-				$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
+				$this->setResultCode(104);
+				$response["msg"] = "It's your week off.Please contact administrator for registering attendance ";
 			}
-		} 
-		echo json_encode($response);	
+		}	
+		else 
+		{
+			$this->setResultCode(105);
+			$response["msg"] = "You are not in roaster id.Please contact administrator to register your attendance";
+		}
+
+					echo json_encode($response);
+		
 	}
+	
+	// public function checkin1()
+	// {
+	// 	//$request = getRequestData();
+	// 	$request = $this->createDummyCheckinRequest();
+	// 	$this->setRequestCodeHeaderToResponse();
+		
+		
+	// 	$this->load->model('AttendanceModel');
+	// 	$checkedInAlready = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
+	// 	if($checkedInAlready != null)
+	// 	{
+	// 		//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
+	// 		$this->setResultCode(101);
+	// 		$response["msg"] = "You have already checked in at " .$checkedInAlready[0]->time_in;
+	// 	}
+	// 	else
+	// 	{
+	// 		$attendanceId = $this->AttendanceModel->checkin($request->staffId, $request->date,  $request->timeIn);	
+	// 		if($attendanceId > 0)
+	// 		{
+	// 			$this->setResultCode(100);
+	// 			$response["msg"] = "Attendance registered Successfully.";
+	// 		}
+	// 		else
+	// 		{
+	// 			$this->setResultCode(102);
+	// 			$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
+	// 		}
+	// 	} 
+	// 	echo json_encode($response);	
+	// }
 	
 
 	// public function checkout()
@@ -207,98 +223,207 @@ class Welcome extends CI_Controller {
 		//load Attendance model
 		$this->load->model('AttendanceModel');
 		$roaster = $this->AttendanceModel->checkRoaster($request->staffId, $request->date);
-	
+		
 		if($roaster != null)
 		{
-			$attendance = $this->AttendanceModel->isCheckedInAlready($roaster->roaster_id);
-			if($attendance != null)
+			if($roaster->shift_id != $this->AttendanceModel->WEEKOFF_SHIFTID)
 			{
-				$success = $this->AttendanceModel->checkout($roaster->roaster_id, $request->timeOut);
-				if($success >= 0)
+				$attendance = $this->AttendanceModel->isCheckedInAlready($roaster->roaster_id);
+				if($attendance != null)
 				{
-					$this->setResultCode(100);
-					$response["msg"] = "checked out Successfully.";
+					$success = $this->AttendanceModel->checkout($roaster->roaster_id, $request->timeOut);
+					if($success >= 0)
+					{
+						$this->setResultCode(100);
+						$response["msg"] = "checked out Successfully.";
+					}
+					else
+					{
+						$this->setResultCode(101);
+						$response["msg"] = "checked out failed.Please try again later";
+					}
 				}
 				else
 				{
-					$this->setResultCode(101);
-					$response["msg"] = "checked out failed.Please try again later";
+					
+					echo "in checkin not available logic";
+					$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
+					echo "in insert checkout call logic";
+					echo "\nattendanceId ".$attendance;
+					if($attendance > 0)
+					{
+						echo "insert query logic";
+						$this->setResultCode(103);
+						$response["msg"] = "Checked out successfully, you haven't checked in today. Please contact administrator";
+					}
+					else
+					{
+						$this->setResultCode(103);
+						$response["msg"] = "Something went wrong in registering your checkout. Please contact administrator";
+					}
 				}
+			
 			}
 			else
 			{
-				echo "in checkin not available logic";
-				$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
-				echo "in insert checkout call logic";
-				echo "\nattendanceId ".$attendance;
-				if($attendance > 0)
-				{
-					echo "insert query logic";
-					$this->setResultCode(103);
-					$response["msg"] = "Checked out successfully, you haven't checked in today. Please contact administrator";
-				}
-				else
-				{
-					$this->setResultCode(103);
-					$response["msg"] = "Something went wrong in registering your checkout. Please contact administrator";
-				}
+				$this->setResultCode(104);
+				$response["msg"] = "It's your week off.Please contact administrator for registering attendance ";	
 			}
-		
 		}
 		else 
 		{
-			// code...
+
 			$this->setResultCode(104);
 			$response["msg"] = "You are not in roaster id.Please contact administrator to register your attendance";
+
 		}
 		
 		echo json_encode($response);
 			
 			
 	}
-	public function checkout1()
+	// public function checkRoasterDetails()
+	// {
+	// 	//$request = getRequestData();
+	// 	echo "\nroaster details";
+		
+	// 	$request = $this->createDummyRoasterRequest();
+	// 	$this->setRequestCodeHeaderToResponse();
+	// 	//load Attendance model
+	// 	var_dump($request);
+	// 	$this->load->model('AttendanceModel');
+	// 	$roasterDetails = $this->AttendanceModel->getRoasterDetails($request->staffId, $request->limit, $request->fromDate, $request->toDate);
+	// 	if($roasterDetails != null)
+	// 	{
+	// 		$data["count"] = count($roasterDetails);
+	// 		$data["roasterDetails"] = array();
+	// 		$index = 0;
+			
+	// 		foreach($roasterDetails as $row)
+	// 		{
+	// 		    $data["roasterDetails"][$index]["roaster_id"] = $row->roaster_id;
+	// 		    $data["roasterDetails"][$index]["date"] = $row->date;
+	// 		    $data["roasterDetails"][$index]["shift_id"] = $row->shift_id;
+	// 		    $index++;
+	// 		}
+	// 	}
+	// 	else 
+	// 	{
+	// 		// code...
+	// 		$this->setResultCode(104);
+	// 		$response["msg"] = "Your details not in roaster for the given date range.Please contact administrator for details";
+	// 	}
+		
+	// 	echo json_encode($data);
+			
+			
+	// }
+	private function loadModel($model)
+    {
+    	$CI =& get_instance();
+		$CI->load->model($model);
+		return $CI->$model;
+    }
+	public function checkRoasterDetails()
 	{
 		//$request = getRequestData();
-		$request = $this->createDummyCheckoutRequest();
+		echo "\nroaster details1";
+		
+		$request = $this->createDummyRoasterRequest();
 		$this->setRequestCodeHeaderToResponse();
-		//Extract: build data key,value pairs for inserting
-		$response = array();
-		
 		//load Attendance model
-		$this->load->model('AttendanceModel');
-		$attendance = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
+		//var_dump($request);
 		
-		if($attendance != null)
+		$attendanceModel = $this->loadModel('AttendanceModel');
+		$roasterDetails = null;
+		echo "\nloading model";
+		if(isset($request->fromDate) && isset($request->toDate))
 		{
-			$success = $this->AttendanceModel->checkout($request->staffId, $request->date, $request->timeOut);
-			echo "\nsuccess :". $success;
-			if($success >= 0)
-			{
-				$this->setResultCode(100);
-				$response["msg"] = "checked out Successfully.";
-			}
-			else
-			{
-				
-			}
-		}	
+			echo "\n in roaster params logic";
+			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
+		}
+		else
+		{
+			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit);
+		}
+		
+		if($roasterDetails == null)
+		{
+			$this->setResultCode(801);
+			$response["count"] = count($roasterDetails);
+			$data['msg'] = "No records found";
+		}
 		else 
-		{	
-			$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
-			echo "\nattendanceId ". $attendanceId;
-			if($attendanceId > 0)
+		{
+			$this->setResultCode(802);
+			$response["count"] = count($roasterDetails);
+			$response["roasterDetails"] = array();
+			$index = 0;
+			// var_dump($roasterDetails);
+			foreach($roasterDetails as $row)
 			{
-				$this->setResultCode(103);
-				$response["msg"] = "Checked out successfully, you haven't checked in today. Please contact administrator";
+			    $response["roasterDetails"][$index]["roaster_id"] = $row->roaster_id;
+			    $response["roasterDetails"][$index]["date"] = $row->date;
+			    $response["roasterDetails"][$index]["shift_id"] = $row->shift_id;
+			    $response["roasterDetails"][$index]["shift"] = $row->shift;
+			    $response["roasterDetails"][$index]["description"] = $row->description;
+			    $response["roasterDetails"][$index]["time_in"] = $row->time_in;
+			    $response["roasterDetails"][$index]["time_out"] = $row->time_out;
+			    
+			    $index++;
 			}
-			else
-			{
-				
-			}
-			
 		}
 		echo json_encode($response);
 	}
+	
+			
+			
+	
+
+	// public function checkout1()
+	// {
+	// 	//$request = getRequestData();
+	// 	$request = $this->createDummyCheckoutRequest();
+	// 	$this->setRequestCodeHeaderToResponse();
+	// 	//Extract: build data key,value pairs for inserting
+	// 	// $response = array();
+		
+	// 	//load Attendance model
+	// 	$this->load->model('AttendanceModel');
+	// 	echo "loading model";
+	// 	$attendance = $this->AttendanceModel->isCheckedInAlready($request->staffId, $request->date);
+		
+	// 	if($attendance != null)
+	// 	{
+	// 		$success = $this->AttendanceModel->checkout($request->staffId, $request->date, $request->timeOut);
+	// 		echo "\nsuccess :". $success;
+	// 		if($success >= 0)
+	// 		{
+	// 			$this->setResultCode(100);
+	// 			$response["msg"] = "checked out Successfully.";
+	// 		}
+	// 		else
+	// 		{
+				
+	// 		}
+	// 	}	
+	// 	else 
+	// 	{	
+	// 		$attendance = $this->AttendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
+	// 		echo "\nattendanceId ". $attendanceId;
+	// 		if($attendanceId > 0)
+	// 		{
+	// 			$this->setResultCode(103);
+	// 			$response["msg"] = "Checked out successfully, you haven't checked in today. Please contact administrator";
+	// 		}
+	// 		else
+	// 		{
+				
+	// 		}
+			
+	// 	}
+	// 	echo json_encode($response);
+	// }
 	/*
 	public function getAttendanceHistory()
 	{
@@ -340,7 +465,7 @@ class Welcome extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "100";
 		$request = array();
-		$request["staffId"] = 11;
+		$request["staffId"] = 13;
 		// $request["shiftId"] = 1;
 		$request["date"] = '2016-08-31';
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -354,7 +479,7 @@ class Welcome extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "101";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 13;
 		$request["date"] = '2016-08-31';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -376,7 +501,19 @@ class Welcome extends CI_Controller {
 		var_dump($request);	
 		return Json_decode(json_encode($request));
 	}
-	
+	private function createDummyRoasterRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "102";
+		$request = array();
+		$request["staffId"] = 8;
+		$request["limit"] = 3;
+		// $request["fromDate"] = '2016-07-30';
+		// $request["toDate"] = '2016-10-03';
+		
+		
+		// var_dump($request);	
+		return Json_decode(json_encode($request));
+	}
 	private function getRequestData()
 	{
 		$postdata = file_get_contents("php://input");
