@@ -17,17 +17,24 @@ class Attendance {
 		$CI->load->model($model);
 		return $CI->$model;
     }
+    
     public function getAttendanceHistory($request)
     {
-    	//$this->setRequestCodeHeaderToResponse();
-		
+    	var_dump($request);
+    	// $this->setRequestCodeHeaderToResponse();
+		echo "\nin function";
 		//load Attendance model
 		//$this->load->model('AttendanceModel');
 		$attendanceModel = $this->loadModel('AttendanceModel');
+		echo "\n loading model";
 		$history = null;
+		var_dump($request);
+		// echo "\nfromdate" .$request->from;
 		if(isset($request->from) && isset($request->to))
 		{
-			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->from, $request->to);	
+			echo "\nfromdate". $request->from;
+			echo "\n in history params logic";
+			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
 		}
 		else
 		{
