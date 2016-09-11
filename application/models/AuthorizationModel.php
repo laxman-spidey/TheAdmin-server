@@ -20,13 +20,13 @@ class AuthorizationModel extends CI_Model
         if($query->num_rows() > 0)
         {
             $authorization = $query->result();
-            echo "has a row";
+            //echo "has a row";
             $authorizationId = 0;
         }
         else 
         
         {
-            echo "no rows";
+            //echo "no rows";
             $authorizationId = -1;
             $authorization = null;
         }
@@ -49,13 +49,11 @@ class AuthorizationModel extends CI_Model
         if($query->num_rows() > 0)
         {
             $validation = $query->result();
-            echo "has a row";
             $validationId = 0;
         }
         else 
         
         {
-            echo "no rows";
             $validationId = -1;
             $validation = null;
         }
@@ -84,6 +82,7 @@ class AuthorizationModel extends CI_Model
     }
     public function otpGeneration( $phoneNumber, $password)
     {
+        $password = "123456";
         $query ="select staff_id from staff where phone_number=$phoneNumber";
         $query = $this->db->query($query);
         foreach ($query->result() as $row)  
@@ -96,9 +95,10 @@ class AuthorizationModel extends CI_Model
                         // 'staff_id' => $query->result() ,
                         'phone_number' => $phoneNumber,
                         'otp' => $password
-            );
-            var_dump($data);
-            $this->db->insert('otp_log',$data);
+        );
+            //var_dump($data);
+        $this->db->insert('otp_log',$data);
+        
     }
     
     
