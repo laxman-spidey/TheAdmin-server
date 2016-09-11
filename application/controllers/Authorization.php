@@ -91,6 +91,59 @@ class Authorization extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+	
+	public function userData()
+	{
+		echo "userData";
+		//$request = $this->getRequestData();
+		$request = $this->createUserDummyRequest();
+		$this->setRequestCodeHeaderToResponse(704);
+		$response = array();
+		$this->load->model('AuthorizationModel');
+		$validation = $this->AuthorizationModel->validateOtp($request->phoneNumber,$request->otp);
+		if($validation != null)
+		{
+			echo "inside validateOtp";
+		    var_dump($validation);
+			$this->setResultCode(705);
+			$response["msg"] = "otp is valid and you are logged in ";
+			$authorization = $this->AuthorizationModel->checkAuthorization( $request->phoneNumber);
+			if($authorization != null)
+			{
+				$this->setResultCode(706);
+				$response["count"] = count($authorization);
+				$response["authorization"] = array();
+				$index = 0;
+				var_dump($authorization);
+				foreach($authorization as $row)
+				{
+			    $response["authorization"][$index]["staff_id"] = $row->staff_id;
+			    $response["authorization"][$index]["phone_number"] = $row->phone_number;
+			    $response["authorization"][$index]["staff_name"] = $row->staff_name;
+			    
+			    $index++;
+				}
+			}
+			else
+			{
+				$this->setResultCode(707);
+				$response["msg"] = "Did not find staff details.";
+			}
+
+		}
+		
+		else
+		{
+			echo "outside validateOtp";
+		  	$this->setResultCode(706);
+			$response["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
+			
+		}
+		echo json_encode($response);
+	}
+	
+	
+	
 	private function getRequestData()
 	{
 		$postdata = file_get_contents("php://input");
