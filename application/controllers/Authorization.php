@@ -23,11 +23,11 @@ class Authorization extends CI_Controller {
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 	 
-		public function checkauthorization()
+	public function checkauthorization()
 	{
-		echo "checkauthorization";
-		//$request = $this->getRequestData();
-		$request = $this->createAuthorizationDummyRequest1();
+		//echo "checkauthorization";
+		$request = $this->getRequestData();
+		//$request = $this->createAuthorizationDummyRequest1();
 		$this->setRequestCodeHeaderToResponse(701);
 		$response = array();
 		$this->load->model('AuthorizationModel');
@@ -36,17 +36,17 @@ class Authorization extends CI_Controller {
 		{
 			$this->setResultCode(702);
 		
-      	echo "otp generation";
-       $string = '0123456789';
-       $string_shuffled = str_shuffle($string);
-       $password = substr($string_shuffled, 1, 6);
+      		//echo "otp generation";
+    		$string = '0123456789';
+    		$string_shuffled = str_shuffle($string);
+    		$password = substr($string_shuffled, 1, 6);
 
-       file_get_contents("http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=abc&pwd=$password&to=919898123456&sid=senderid&msg=test%20message&fl=0");
+    		file_get_contents("http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=abc&pwd=$password&to=919898123456&sid=senderid&msg=test%20message&fl=0");
 
-        $generateOtp = $this->AuthorizationModel->otpGeneration( $request->phoneNumber,$password);
+        	$generateOtp = $this->AuthorizationModel->otpGeneration( $request->phoneNumber,$password);
+        	
 			$response["msg"] = "You are authorized and otp will be sending ";
 		}
-		
 		else
 		{
 		  	$this->setResultCode(703);
@@ -57,9 +57,9 @@ class Authorization extends CI_Controller {
 	}
 	public function validateotp()
 	{
-		echo "validateotp";
-		//$request = $this->getRequestData();
-		$request = $this->createValidateOtpDummyRequest();
+		//echo "validateotp";
+		$request = $this->getRequestData();
+		//$request = $this->createValidateOtpDummyRequest();
 		$this->setRequestCodeHeaderToResponse(704);
 		$response = array();
 		$this->load->model('AuthorizationModel');
@@ -85,12 +85,65 @@ class Authorization extends CI_Controller {
 		
 		else
 		{
+		  	$this->setResultCode(708);
+			$response["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
+			
+		}
+		echo json_encode($response);
+	}
+	
+	public function userData()
+	{
+		echo "userData";
+		//$request = $this->getRequestData();
+		$request = $this->createUserDummyRequest();
+		$this->setRequestCodeHeaderToResponse(704);
+		$response = array();
+		$this->load->model('AuthorizationModel');
+		$validation = $this->AuthorizationModel->validateOtp($request->phoneNumber,$request->otp);
+		if($validation != null)
+		{
+			echo "inside validateOtp";
+		    var_dump($validation);
+			$this->setResultCode(705);
+			$response["msg"] = "otp is valid and you are logged in ";
+			$authorization = $this->AuthorizationModel->checkAuthorization( $request->phoneNumber);
+			if($authorization != null)
+			{
+				$this->setResultCode(706);
+				$response["count"] = count($authorization);
+				$response["authorization"] = array();
+				$index = 0;
+				var_dump($authorization);
+				foreach($authorization as $row)
+				{
+			    $response["authorization"][$index]["staff_id"] = $row->staff_id;
+			    $response["authorization"][$index]["phone_number"] = $row->phone_number;
+			    $response["authorization"][$index]["staff_name"] = $row->staff_name;
+			    
+			    $index++;
+				}
+			}
+			else
+			{
+				$this->setResultCode(707);
+				$response["msg"] = "Did not find staff details.";
+			}
+
+		}
+		
+		else
+		{
+			echo "outside validateOtp";
 		  	$this->setResultCode(706);
 			$response["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
 			
 		}
 		echo json_encode($response);
 	}
+	
+	
+	
 	private function getRequestData()
 	{
 		$postdata = file_get_contents("php://input");
