@@ -67,11 +67,14 @@ class AuthorizationModel extends CI_Model
         $this->db->set('otp_status', 'used');
         $this->db->where('phone_number',$phoneNumber)
                 ->where('otp',$otp)
-                ->where('otp_status','Generated');
+                ->where_in('otp_status',array('Generated','used'));
         $otpUpdation = $this->db->update('otp_log');
         if ($otpUpdation == 1) 
         {
             return $this->db->affected_rows();
+    
+    
+    
         } 
         else 
         {
