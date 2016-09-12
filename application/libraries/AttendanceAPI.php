@@ -147,7 +147,8 @@ class AttendanceAPI {
 				{
 					
 					echo "in checkin not available logic";
-					$attendance = $attendanceModel->insertCheckout($request->staffId, $request->date, $request->timeOut);
+					// $attendance = $attendanceModel->insertCheckout($roaster->roaster_id,$request->staffId, $request->date, $request->timeOut);
+					$attendance = $attendanceModel->insertCheckout($roaster->roaster_id, $request->timeOut);
 					echo "in insert checkout call logic";
 					echo "\nattendanceId ".$attendance;
 					if($attendance > 0)

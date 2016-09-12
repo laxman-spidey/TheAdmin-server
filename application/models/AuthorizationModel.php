@@ -33,7 +33,27 @@ class AuthorizationModel extends CI_Model
         return $authorization;
     }
     
-       
+    public function expireOtp($phoneNumber)
+    {
+        
+        $this->db->set('otp_status', 'expired');
+        $this->db->where('phone_number',$phoneNumber)
+                // ->where('otp',$otp)
+                ->where_in('otp_status','Generated');
+        $expireOtp = $this->db->update('otp_log');
+        if ($expireOtp == 1) 
+        {
+            return $this->db->affected_rows();
+        } 
+        else 
+        {
+            ///$this->db->_error_message()
+            return -1; // Or do whatever you gotta do here to raise an error
+        }
+        
+    }
+    
+      
     public function validateOtp($phoneNumber , $otp)
     {
         $this->db->select("*")

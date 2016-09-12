@@ -49,6 +49,7 @@ class Apptest extends CI_Controller {
 	*/
 	public function checkin()
 	{
+		echo LOGIN_SUCCESS;
 		$request = $this->createDummyCheckinRequest();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
@@ -77,6 +78,37 @@ class Apptest extends CI_Controller {
 		$this->setResultCode($response["responseCode"]);
 		echo json_encode($response["data"]);
 	}
+	
+	public function checkauthorization()
+	{
+		$request = $this->createAuthorizationDummyRequest1();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('AuthorizationAPI');
+		$response = $this->authorizationapi->checkauthorization($request);
+		$this->setResultCode($response["responseCode"]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function validateotp()
+	{
+		$request = $this->createValidateOtpDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('AuthorizationAPI');
+		$response = $this->authorizationapi->validateotp($request);
+		$this->setResultCode($response["responseCode"]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function userData()
+	{
+		$request = $this->createUserDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('AuthorizationAPI');
+		$response = $this->authorizationapi->userData($request);
+		$this->setResultCode($response["responseCode"]);
+		echo json_encode($response["data"]);
+	}
+	
 	private function loadModel($model)
     {
     	$CI =& get_instance();
@@ -88,7 +120,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "100";
 		$request = array();
-		$request["staffId"] = 17;
+		$request["staffId"] = 3;
 		// $request["shiftId"] = 1;
 		$request["date"] = '2016-09-12';
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -102,7 +134,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "101";
 		$request = array();
-		$request["staffId"] = 3;
+		$request["staffId"] = 1;
 		$request["date"] = '2016-09-12';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -137,6 +169,36 @@ class Apptest extends CI_Controller {
 		// var_dump($request);	
 		return Json_decode(json_encode($request));
 	}
+	
+	private function createAuthorizationDummyRequest1()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "700";
+		$request = array();
+		$request["phoneNumber"] = 9505878984;
+		return Json_decode(json_encode($request));
+		
+	}
+	
+	private function createValidateOtpDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "800";
+		$request = array();
+		$request["phoneNumber"] = 9505878984;
+		$request["otp"] = 123456;
+		return Json_decode(json_encode($request));
+		
+	}
+	
+	private function createUserDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "800";
+		$request = array();
+		$request["phoneNumber"] = 9505878984;
+		$request["otp"] = 123456;
+		return Json_decode(json_encode($request));
+		
+	}
+	
 	private function setRequestCodeHeaderToResponse()
 	{
 		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);

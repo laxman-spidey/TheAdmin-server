@@ -30,9 +30,7 @@ class Welcome extends CI_Controller {
 	
 	public function getAttendanceHistory()
 	{
-		
-		$request = $this->createDummyHistoryRequest();
-		// $request = $this->getRequestData();
+		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		var_dump($request);
 		$this->load->library('Attendance');
@@ -89,57 +87,7 @@ class Welcome extends CI_Controller {
 		$CI->load->model($model);
 		return $CI->$model;
     }
-	public function getRoasterDetails1()
-	{
-		//$request = getRequestData();
-		echo "\nroaster details1";
-		
-		$request = $this->createDummyRoasterRequest();
-		$this->setRequestCodeHeaderToResponse();
-		//load Attendance model
-		//var_dump($request);
-		
-		$attendanceModel = $this->loadModel('AttendanceModel');
-		$roasterDetails = null;
-		echo "\nloading model";
-		if(isset($request->fromDate) && isset($request->toDate))
-		{
-			echo "\n in roaster params logic";
-			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
-		}
-		else
-		{
-			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit);
-		}
-		
-		if($roasterDetails == null)
-		{
-			$this->setResultCode(801);
-			$response["count"] = count($roasterDetails);
-			$data['msg'] = "No records found";
-		}
-		else 
-		{
-			$this->setResultCode(802);
-			$response["count"] = count($roasterDetails);
-			$response["roasterDetails"] = array();
-			$index = 0;
-			// var_dump($roasterDetails);
-			foreach($roasterDetails as $row)
-			{
-			    $response["roasterDetails"][$index]["roaster_id"] = $row->roaster_id;
-			    $response["roasterDetails"][$index]["date"] = $row->date;
-			    $response["roasterDetails"][$index]["shift_id"] = $row->shift_id;
-			    $response["roasterDetails"][$index]["shift"] = $row->shift;
-			    $response["roasterDetails"][$index]["description"] = $row->description;
-			    $response["roasterDetails"][$index]["time_in"] = $row->time_in;
-			    $response["roasterDetails"][$index]["time_out"] = $row->time_out;
-			    
-			    $index++;
-			}
-		}
-		echo json_encode($response);
-	}
+
 	
 	private function getRequestData()
 	{
