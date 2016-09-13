@@ -27,7 +27,7 @@ class AuthorizationAPI {
 		$authorization = $authorizationModel->checkAuthorization($request->phoneNumber);
 		if($authorization != null)
 		{
-			$response["responseCode"] = 702;
+			$response["responseCode"] = CHECK_AUTHORIZATION_SUCCESS;
 			$expireOtp = $authorizationModel->expireOtp( $request->phoneNumber);
 			//echo "after expire";
 			if($expireOtp >= 0) 
@@ -46,15 +46,15 @@ class AuthorizationAPI {
 			}
 			else
 			{
-			  	$response["responseCode"] = 703;
+			  	$response["responseCode"] = CHECK_AUTHORIZATION_FAIL;
 				$data["msg"] = "You are not authorized.Please enter valid credentials"; 
 				
 			}
 		}
 		else
 		{
-			$response["responseCode"] = 704;
-			$data["msg"] = "otp expiration mthd failed"; 
+			$response["responseCode"] = CHECK_AUTHORIZATION_EXPIRATION_UPDATE_FAIL;
+			$data["msg"] = "otp expiration status update failed"; 
 		}
 		$response["data"] = $data;
 		return $response;
@@ -68,17 +68,17 @@ class AuthorizationAPI {
 		$validation = $authorizationModel->validateOtp($request->phoneNumber,$request->otp);
 		if($validation != null)
 		{
-		    $response["responseCode"] = 705;
+		    $response["responseCode"] = LOGIN_SUCCESS;
 			$data["msg"] = "otp is valid and you are logged in ";
 			$otpUpdation = $authorizationModel->updateOtpStatus( $request->phoneNumber,$request->otp);
 			if($otpUpdation >= 0)
 			{
-				$response["responseCode"] = 706;
+				$response["responseCode"] = VALIDATE_OTP_STATUS_UPDATE_SUCCESS;
 				$data["msg"] = "otp status updated ";
 			}
 			else
 			{
-				$response["responseCode"] = 707;
+				$response["responseCode"] = VALIDATE_OTP_STATUS_UPDATE_FAIL;
 				$data["msg"] = "otp status updation failed. ";
 			}
 
@@ -86,7 +86,7 @@ class AuthorizationAPI {
 		
 		else
 		{
-		  	$response["responseCode"] = 708;
+		  	$response["responseCode"] = LOGIN_FAIL;
 			$data["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
 			
 		}
@@ -105,12 +105,12 @@ class AuthorizationAPI {
 		{
 			//echo "inside validateOtp";
 		    //var_dump($validation);
-			$response["responseCode"] = 705;
+			$response["responseCode"] = LOGIN_SUCCESS;
 			$data["msg"] = "otp is valid and you are logged in ";
 			$authorization = $authorizationModel->checkAuthorization( $request->phoneNumber);
 			if($authorization != null)
 			{
-				$response["responseCode"] = 706;
+				$response["responseCode"] = USER_DATA_SUCCESS;
 				$data["authorization"] = array();
 				
 				$data["authorization"]["staff_id"] = $authorization[0]->staff_id;
@@ -120,7 +120,7 @@ class AuthorizationAPI {
 			}
 			else
 			{
-				$response["responseCode"] = 707;
+				$response["responseCode"] = USER_DATA_FAIL;
 				$data["msg"] = "Did not find staff details.checking";
 			}
 
@@ -129,7 +129,7 @@ class AuthorizationAPI {
 		else
 		{
 			//echo "outside validateOtp";
-		  	$response["responseCode"] = 708;
+		  	$response["responseCode"] = LOGIN_FAIL;
 			$data["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
 			
 		}

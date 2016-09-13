@@ -45,7 +45,7 @@ class AttendanceAPI {
 		$data = array();
 		if($history == null)
 		{
-			$response['responseCode'] = 107;
+			$response['responseCode'] = ATTENDANCE_HISTORY_DETAILS_DOES_NOT_EXISTS_IN_LIMIT;
 			$response['success'] = false;
 			$data['msg'] = "No records found";
 		}
@@ -83,7 +83,7 @@ class AttendanceAPI {
 				if($checkedInAlready != null)
 				{
 					//If the user is checked in for the already, he is not allowed to update later timing unless the admin wants to.
-					$response["responseCode"] = 101;
+					$response["responseCode"] = CHECKIN_ALREADY_CHECKEDIN;
 					$data["msg"] = "You have already checked in at " .$checkedInAlready[0]->time_in;
 				}
 				else
@@ -91,25 +91,25 @@ class AttendanceAPI {
 					$attendanceId = $attendanceModel->checkin($roaster->roaster_id,  $request->timeIn);	
 					if($attendanceId > 0)
 					{
-						$response["responseCode"] = 100;
+						$response["responseCode"] = CHECKIN_SUCCESS;
 						$data["msg"] = "Attendance registered Successfully.";
 					}
 					else
 					{
-						$response["responseCode"] = 102;
+						$response["responseCode"] = CHECKIN_INSERT_DBERROR;
 						$data["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
 					}
 				}
 			}
 			else
 			{
-				$response["responseCode"] = 104;
+				$response["responseCode"] = INFO_WEEKOFF;
 				$data["msg"] = "It's your week off.Please contact administrator for registering attendance ";
 			}
 		}	
 		else 
 		{
-			$response["responseCode"] = 105;
+			$response["responseCode"] = ROASTER_DOES_NOT_EXISTS;
 			$data["msg"] = "You are not in roaster id.Please contact administrator to register your attendance";
 		}
 		$response["data"] = $data;
@@ -134,12 +134,12 @@ class AttendanceAPI {
 					$success = $attendanceModel->checkout($roaster->roaster_id, $request->timeOut);
 					if($success >= 0)
 					{
-						$response["responseCode"] = 100;
+						$response["responseCode"] = CHECKOUT_SUCCESS;
 						$data["msg"] = "checked out Successfully.";
 					}
 					else
 					{
-						$response["responseCode"] = 101;
+						$response["responseCode"] = CHECKOUT_INSERT_DBERROR;
 						$data["msg"] = "checked out failed.Please try again later";
 					}
 				}
@@ -153,12 +153,12 @@ class AttendanceAPI {
 					echo "\nattendanceId ".$attendance;
 					if($attendance > 0)
 					{
-						$response["responseCode"] = 103;
+						$response["responseCode"] = CHECKOUT_SUCCESS_CHECKIN_DOES_NOT_EXISTS;
 						$data["msg"] = "Checked out successfully, you haven't checked in today. Please contact administrator";
 					}
 					else
 					{
-						$response["responseCode"] = 104;
+						$response["responseCode"] = CHECKOUT_INSERT_DBERROR; //used same 
 						$data["msg"] = "Something went wrong in registering your checkout. Please contact administrator";
 					}
 				}
@@ -166,13 +166,13 @@ class AttendanceAPI {
 			}
 			else
 			{
-				$response["responseCode"] = 105;
+				$response["responseCode"] = INFO_WEEKOFF; //same
 				$data["msg"] = "It's your week off.Please contact administrator for registering attendance ";	
 			}
 		}
 		else 
 		{
-			$response["responseCode"] = 106;
+			$response["responseCode"] = WARNING_ROASTER_DOES_NOT_EXISTS; //same
 			$data["msg"] = "You are not in roaster id.Please contact administrator to register your attendance";
 
 		}
@@ -205,13 +205,13 @@ class AttendanceAPI {
 		
 		if($roasterDetails == null)
 		{
-			$response["responseCode"] = 801;
+			$response["responseCode"] = ROASTER_DETAILS_DOES_NOT_EXISTS_IN_LIMIT;
 			$data["count"] = count($roasterDetails);
 			$data['msg'] = "No records found";
 		}
 		else 
 		{
-			$response["responseCode"] = 802;
+			$response["responseCode"] = ROASTER_DETAILS_EXISTS_IN_LIMIT;
 			$data["count"] = count($roasterDetails);
 			$data["roasterDetails"] = array();
 			$index = 0;

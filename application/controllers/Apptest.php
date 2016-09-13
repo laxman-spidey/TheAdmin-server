@@ -49,7 +49,7 @@ class Apptest extends CI_Controller {
 	*/
 	public function checkin()
 	{
-		echo LOGIN_SUCCESS;
+		// echo LOGIN_SUCCESS;
 		$request = $this->createDummyCheckinRequest();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
@@ -81,7 +81,7 @@ class Apptest extends CI_Controller {
 	
 	public function checkauthorization()
 	{
-		$request = $this->createAuthorizationDummyRequest1();
+		$request = $this->createAuthorizationDummyRequest();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->checkauthorization($request);
@@ -132,7 +132,7 @@ class Apptest extends CI_Controller {
 	/* creates dummy checkin request */
 	private function createDummyCheckoutRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "101";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "110";
 		$request = array();
 		$request["staffId"] = 1;
 		$request["date"] = '2016-09-12';
@@ -145,7 +145,7 @@ class Apptest extends CI_Controller {
 	/* creates dummy checkin request */
 	private function createDummyHistoryRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "102";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "130";
 		$request = array();
 		$request["staffId"] = 7;
 		$request["limit"] = 3;
@@ -158,7 +158,7 @@ class Apptest extends CI_Controller {
 	}
 	private function createDummyRoasterRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "102";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "120";
 		$request = array();
 		$request["staffId"] = 8;
 		$request["limit"] = 3;
@@ -170,9 +170,9 @@ class Apptest extends CI_Controller {
 		return Json_decode(json_encode($request));
 	}
 	
-	private function createAuthorizationDummyRequest1()
+	private function createAuthorizationDummyRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "700";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "140";
 		$request = array();
 		$request["phoneNumber"] = 9505878984;
 		return Json_decode(json_encode($request));
@@ -181,7 +181,7 @@ class Apptest extends CI_Controller {
 	
 	private function createValidateOtpDummyRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "800";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "160";
 		$request = array();
 		$request["phoneNumber"] = 9505878984;
 		$request["otp"] = 123456;
@@ -191,7 +191,7 @@ class Apptest extends CI_Controller {
 	
 	private function createUserDummyRequest()
 	{
-		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "800";
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "150";
 		$request = array();
 		$request["phoneNumber"] = 9505878984;
 		$request["otp"] = 123456;
