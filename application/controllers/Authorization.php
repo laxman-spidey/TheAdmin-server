@@ -3,10 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Authorization extends CI_Controller {
 	
-	public $TAG_HTTP_REQUEST_CODE = "HTTP_REQUESTCODE";
-	public $TAG_REQUEST_CODE = "requestCode";
-	public $TAG_RESULT_CODE = "resultCode";
-
 	/**
 	 * Index Page for this controller.
 	 *
@@ -29,7 +25,7 @@ class Authorization extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->checkauthorization($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -38,9 +34,26 @@ class Authorization extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
-		$response = $this->authorizationapi->validateotp($request);
-		$this->setResultCode($response["responseCode"]);
-		echo json_encode($response["data"]);
+		$otpResponse = $this->authorizationapi->validateotp($request);
+		$success = $otpResponse[TAG_RESULT_CODE];
+		$userDataResponse;
+		if($success == LOGIN_SUCCESS)
+		{
+			$userDataResponse = $this->authorizationapi->userData($request);
+			if($userDataResponse[TAG_RESULT_CODE] == USER_DATA_SUCCESS)
+			{
+				$this->setResultCode(LOGIN_SUCCESS);
+			}
+			else
+			{
+				$this->setResultCode(USER_DATA_FAIL); 
+			}
+		}
+		else
+		{
+			$this->setResultCode(INVALID_OTP);
+		}
+		echo json_encode($userDataResponse["data"]);
 	}
 	
 	public function userData()
@@ -49,7 +62,7 @@ class Authorization extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->userData($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -60,13 +73,10 @@ class Authorization extends CI_Controller {
 		return json_decode($postdata);
 	}
 	
+	
 	private function setRequestCodeHeaderToResponse()
 	{
-		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);
-		// var_dump($requestCodeArray);
-		// $requestCode = $requestCodeArray[0];
-		// echo "---------------------------- $requestCode ----------------------";
-		header("$this->TAG_REQUEST_CODE: " . $_SERVER['HTTP_REQUESTCODE']  . "");
+		header("".TAG_REQUEST_CODE.": " . $_SERVER['HTTP_REQUESTCODE']  . "");
 	}
 	private function setSuccess($success)
 	{
@@ -74,8 +84,7 @@ class Authorization extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.$this->TAG_RESULT_CODE .': '. $resultCode .'');
-		
+		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
 		
 

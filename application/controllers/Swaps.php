@@ -175,14 +175,17 @@ class Swaps extends CI_Controller {
 		return json_decode($postdata);
 	}
 	
-	private function setRequestCodeHeaderToResponse($requestCode)
+	private function setRequestCodeHeaderToResponse()
 	{
-		header("$this->TAG_REQUEST_CODE: " . $requestCode . "");
+		header("".TAG_REQUEST_CODE.": " . $_SERVER['HTTP_REQUESTCODE']  . "");
+	}
+	private function setSuccess($success)
+	{
+		header("success: ".$success);
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.$this->TAG_RESULT_CODE .': '. $resultCode .'');
-		
+		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
 	
 	/* creates dummy Leave request */

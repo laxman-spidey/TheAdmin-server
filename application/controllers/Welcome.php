@@ -3,9 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
 	
-	public $TAG_HTTP_REQUEST_CODE = "HTTP_REQUESTCODE";
-	public $TAG_REQUEST_CODE = "requestCode";
-	public $TAG_RESULT_CODE = "resultCode";
 	public $WEEKOFF_SHIFTID = '4';
 
 	/**
@@ -37,7 +34,7 @@ class Welcome extends CI_Controller {
 		var_dump($request);
 		$response = $this->attendance->getAttendanceHistory($request);
 		
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		$this->setSuccess($response["success"]);
 		echo json_encode($response["data"]);
 	}	
@@ -58,7 +55,7 @@ class Welcome extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceAPI->checkin($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	public function checkout()
@@ -67,7 +64,7 @@ class Welcome extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceAPI->checkout($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	public function getRoasterDetails()
@@ -76,7 +73,7 @@ class Welcome extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceAPI->getRoasterDetails($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -97,11 +94,7 @@ class Welcome extends CI_Controller {
 	
 	private function setRequestCodeHeaderToResponse()
 	{
-		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);
-		// var_dump($requestCodeArray);
-		// $requestCode = $requestCodeArray[0];
-		// echo "---------------------------- $requestCode ----------------------";
-		header("$this->TAG_REQUEST_CODE: " . $_SERVER['HTTP_REQUESTCODE']  . "");
+		header("".TAG_REQUEST_CODE.": " . $_SERVER['HTTP_REQUESTCODE']  . "");
 	}
 	private function setSuccess($success)
 	{
@@ -109,8 +102,7 @@ class Welcome extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.$this->TAG_RESULT_CODE .': '. $resultCode .'');
-		
+		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
 	
 }

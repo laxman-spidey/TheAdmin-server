@@ -90,12 +90,15 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 */
 
 // Top level constants
+
+
+defined('TAG_HTTP_REQUEST_CODE') OR define('TAG_HTTP_REQUEST_CODE', "HTTP_REQUESTCODE");
+defined('TAG_REQUEST_CODE')      OR define('TAG_REQUEST_CODE', "requestCode");
+defined('TAG_RESULT_CODE')       OR define('TAG_RESULT_CODE', "resultCode");
+
 defined('PRO_SUCCESS')          OR define('PRO_SUCCESS', TRUE); // Request successfully proccessed.
 defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request processing failed.
 
-// Response Codes
-defined('LOGIN_SUCCESS')    OR define('LOGIN_SUCCESS', 100); // Request successfully proccessed.
-defined('PHONE_NUM_DOES_NOT_EXISTS')    OR define('PHONE_NUM_DOES_NOT_EXISTS', 101); // Request successfully proccessed.
 
 // Response Codes for check in
 
@@ -103,25 +106,25 @@ defined('CHECKIN_ALREADY_CHECKEDIN')    OR define('CHECKIN_ALREADY_CHECKEDIN', 1
 defined('CHECKIN_SUCCESS')    OR define('CHECKIN_SUCCESS', 102); // checkin inserted succesfully
 defined('CHECKIN_INSERT_DBERROR')    OR define('CHECKIN_INSERT_DBERROR', 103); // checkin deosnot inserted
 defined('INFO_WEEKOFF')    OR define('INFO_WEEKOFF', 104); // weekoff of staffid.contact administrator to register attendance
-defined('WARNING_ROASTER_DOES_NOT_EXISTS')    OR define('WARNING_ROASTER_DOES_NOT_EXISTS', 105);//staffid doesnot exister in roaster on that day
+defined('WARNING_ROASTER_DOES_NOT_EXIST')    OR define('WARNING_ROASTER_DOES_NOT_EXIST', 105);//staffid doesnot exister in roaster on that day
 
 // Response Codes for check out
 
 defined('CHECKOUT_SUCCESS')    OR define('CHECKOUT_SUCCESS', 111); // checkout inserted succesfully
 defined('CHECKOUT_INSERT_DBERROR')    OR define('CHECKOUT_INSERT_DBERROR', 112); // checkout deosnot inserted
-defined('CHECKOUT_SUCCESS_CHECKIN_DOES_NOT_EXISTS')    OR define('CHECKOUT_SUCCESS_CHECKIN_DOES_NOT_EXISTS', 113); // checkout deosnot inserted
+defined('CHECKOUT_NOT_CHECKEDIN')    OR define('CHECKOUT_NOT_CHECKEDIN', 113); // checkout deosnot inserted
 defined('CHECKOUT_INSERT_DBERROR')    OR define('CHECKOUT_INSERT_DBERROR', 114); // checkout deosnot inserted
-defined('INFO_WEEKOFF')    OR define('INFO_WEEKOFF', 115); // weekoff of staffid.contact administrator to register attendance
-defined('WARNING_ROASTER_DOES_NOT_EXISTS')    OR define('WARNING_ROASTER_DOES_NOT_EXISTS', 116);//staffid doesnot exister in roaster on that day
 
 // Response Codes for roaster details
 
-defined('ROASTER_DETAILS_DOES_NOT_EXISTS_IN_LIMIT')    OR define('ROASTER_DETAILS_DOES_NOT_EXISTS_IN_LIMIT', 121); // Roaster details doesnot found in given limit
-defined('ROASTER_DETAILS_EXISTS_IN_LIMIT')    OR define('ROASTER_DETAILS_EXISTS_IN_LIMIT', 122); // Roaster details found in given limit
+defined('ROASTER_DETAILS_NOT_EXIST')    OR define('ROASTER_DETAILS_NOT_EXIST', 121); // Roaster details doesnot found in given limit
+defined('ROASTER_DETAILS_EXIST')    OR define('ROASTER_DETAILS_EXIST', 122); // Roaster details found in given limit
 
 // Response Codes for Attendance History details
 
-defined('ATTENDANCE_HISTORY_DETAILS_DOES_NOT_EXISTS_IN_LIMIT')    OR define('ATTENDANCE_HISTORY_DETAILS_DOES_NOT_EXISTS_IN_LIMIT', 131); // attendance details does not found in given limit
+defined('ATTENDANCE_HISTORY_NOT_EXIST')    OR define('ATTENDANCE_HISTORY_NOT_EXIST', 131); // attendance details does not found in given limit
+defined('ATTENDANCE_HISTORY_EXIST')    OR define('ATTENDANCE_HISTORY_EXIST', 132); // attendance details found in given limit
+
 
 // Response Codes for checking authorization and expiring unused OTP
 
@@ -134,11 +137,9 @@ defined('CHECK_AUTHORIZATION_EXPIRATION_UPDATE_FAIL')    OR define('CHECK_AUTHOR
 defined('LOGIN_SUCCESS')    OR define('LOGIN_SUCCESS', 151); // Found valid otp and login sucessful
 defined('USER_DATA_SUCCESS')    OR define('USER_DATA_SUCCESS', 152); // Found user details
 defined('USER_DATA_FAIL')    OR define('USER_DATA_FAIL', 153); // Doesnot found user details
-defined('LOGIN_FAIL')    OR define('LOGIN_FAIL', 154); // Entered invalid OTP
 
 // Response Codes for validation OTP and updating status
 
-defined('LOGIN_SUCCESS')    OR define('LOGIN_SUCCESS', 161); // Found valid otp and login sucessful
-defined('VALIDATE_OTP_STATUS_UPDATE_SUCCESS')    OR define('VALIDATE_OTP_STATUS_UPDATE_SUCCESS', 162); // used OTP status update success
-defined('VALIDATE_OTP_STATUS_UPDATE_FAIL')    OR define('VALIDATE_OTP_STATUS_UPDATE_FAIL', 163); // used OTP status update failed
-defined('LOGIN_FAIL')    OR define('LOGIN_FAIL', 164); // Entered invalid OTP
+defined('VALIDATE_OTP_STATUS_UPDATE_SUCCESS')    OR define('VALIDATE_OTP_STATUS_UPDATE_SUCCESS', 161); // used OTP status update success
+defined('VALIDATE_OTP_STATUS_UPDATE_FAIL')    OR define('VALIDATE_OTP_STATUS_UPDATE_FAIL', 162); // used OTP status update failed
+defined('INVALID_OTP')    OR define('INVALID_OTP', 163); // Entered invalid OTP

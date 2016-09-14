@@ -206,13 +206,10 @@ class Welcome extends CI_Controller {
 		return json_decode($postdata);
 	}
 	
+	
 	private function setRequestCodeHeaderToResponse()
 	{
-		// $requestCodeArray = $this->input->get_request_header($this->TAG_REQUEST_CODE, TRUE);
-		// var_dump($requestCodeArray);
-		// $requestCode = $requestCodeArray[0];
-		// echo "---------------------------- $requestCode ----------------------";
-		header("$this->TAG_REQUEST_CODE: " . $_SERVER['HTTP_REQUESTCODE']  . "");
+		header("".TAG_REQUEST_CODE.": " . $_SERVER['HTTP_REQUESTCODE']  . "");
 	}
 	private function setSuccess($success)
 	{
@@ -220,8 +217,6 @@ class Welcome extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.$this->TAG_RESULT_CODE .': '. $resultCode .'');
-		
+		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
-	
 }
