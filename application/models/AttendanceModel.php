@@ -149,9 +149,10 @@ class AttendanceModel extends CI_Model
  
     public function getRoasterDetails($staffId, $limit, $fromDate = null, $toDate = null)
     {
-        $this->db->select('roaster_id,date,r.shift_id,s.shift,s.description,s.time_in,s.time_out')
+        $this->db->select('r.roaster_id,date,r.shift_id,s.shift,s.description,s.time_in as shift_time_in,s.time_out as shift_time_out,a.time_in,a.time_out')
                 ->from('roaster r')
                 ->join('shift s', 'r.shift_id = s.shift_id')
+                ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
                 ->where('staff_id', $staffId)
                 ->order_by('date','desc')
                 ->limit($limit);

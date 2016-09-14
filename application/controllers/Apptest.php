@@ -32,7 +32,7 @@ class Apptest extends CI_Controller {
 		$this->load->library('AttendanceAPI');
 		// $response = $this->attendance->getAttendanceHistory($request);
 		$response = $this->attendanceapi->getAttendanceHistory($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		$this->setSuccess($response["success"]);
 		echo json_encode($response["data"]);
 	}	
@@ -54,7 +54,7 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceapi->checkin($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -65,7 +65,7 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceapi->checkout($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -75,7 +75,7 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
 		$response = $this->attendanceapi->getRoasterDetails($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -85,7 +85,7 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->checkauthorization($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -95,7 +95,8 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->validateotp($request);
-		$this->setResultCode($response["responseCode"]);
+		$response = $this->authorizationapi->userData($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -105,7 +106,7 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->userData($request);
-		$this->setResultCode($response["responseCode"]);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -134,7 +135,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "110";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 11;
 		$request["date"] = '2016-09-12';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -160,10 +161,10 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "120";
 		$request = array();
-		$request["staffId"] = 8;
+		$request["staffId"] = 1;
 		$request["limit"] = 3;
 		$request["fromDate"] = '2016-07-30';
-		$request["toDate"] = '2016-08-03';
+		$request["toDate"] = '2016-09-21';
 		
 		
 		// var_dump($request);	
