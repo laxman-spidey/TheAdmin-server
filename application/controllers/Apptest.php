@@ -163,8 +163,8 @@ class Apptest extends CI_Controller {
 		$request = array();
 		$request["staffId"] = 1;
 		$request["limit"] = 3;
-		$request["fromDate"] = '2016-07-30';
-		$request["toDate"] = '2016-09-21';
+		// $request["fromDate"] = '2016-07-30';
+		// $request["toDate"] = '2016-09-21';
 		
 		
 		// var_dump($request);	

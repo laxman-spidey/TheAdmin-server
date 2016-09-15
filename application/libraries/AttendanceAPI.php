@@ -227,6 +227,7 @@ class AttendanceAPI {
 			    $data["roasterDetails"][$index]["shiftTimeOut"] = $row->shift_time_out;
 			    $data["roasterDetails"][$index]["timeIn"] = $row->time_in;
 			    $data["roasterDetails"][$index]["timeOut"] = $row->time_out;
+			    $data["roasterDetails"][$index]["leave_status"] = $row->leave_status;
 			    $index++;
 			}
 		}
