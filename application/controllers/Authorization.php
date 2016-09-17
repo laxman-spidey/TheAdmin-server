@@ -34,26 +34,10 @@ class Authorization extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
-		$otpResponse = $this->authorizationapi->validateotp($request);
-		$success = $otpResponse[TAG_RESULT_CODE];
-		$userDataResponse;
-		if($success == LOGIN_SUCCESS)
-		{
-			$userDataResponse = $this->authorizationapi->userData($request);
-			if($userDataResponse[TAG_RESULT_CODE] == USER_DATA_SUCCESS)
-			{
-				$this->setResultCode(LOGIN_SUCCESS);
-			}
-			else
-			{
-				$this->setResultCode(USER_DATA_FAIL); 
-			}
-		}
-		else
-		{
-			$this->setResultCode(INVALID_OTP);
-		}
-		echo json_encode($userDataResponse["data"]);
+		$response = $this->authorizationapi->validateotp($request);
+		$response = $this->authorizationapi->userData($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
 	}
 	
 	public function userData()

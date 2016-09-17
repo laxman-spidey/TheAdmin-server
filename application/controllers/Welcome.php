@@ -29,13 +29,10 @@ class Welcome extends CI_Controller {
 	{
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
-		var_dump($request);
-		$this->load->library('Attendance');
-		var_dump($request);
-		$response = $this->attendance->getAttendanceHistory($request);
-		
+		$this->load->library('AttendanceAPI');
+		$response = $this->authorizationapi->getAttendanceHistory($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
-		$this->setSuccess($response["success"]);
+		// $this->setSuccess($response["success"]);
 		echo json_encode($response["data"]);
 	}	
 	
@@ -54,7 +51,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->attendanceAPI->checkin($request);
+		$response = $this->authorizationapi->checkin($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
@@ -63,7 +60,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->attendanceAPI->checkout($request);
+		$response = $this->authorizationapi->checkout($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
@@ -72,7 +69,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->attendanceAPI->getRoasterDetails($request);
+		$response = $this->attendanceapi->getRoasterDetails($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
