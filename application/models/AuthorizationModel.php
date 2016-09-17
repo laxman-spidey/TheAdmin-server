@@ -77,6 +77,7 @@ class AuthorizationModel extends CI_Model
             $validationId = -1;
             $validation = null;
         }
+        echo $this->db->last_query();
         return $validation;
     }
      

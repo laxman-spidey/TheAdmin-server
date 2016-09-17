@@ -22,17 +22,13 @@ class AuthorizationAPI {
 	{
 	    $data = array();
 		$response = array();
-		//echo "checkauthorization";
 		$authorizationModel = $this->loadModel('AuthorizationModel');
 		$authorization = $authorizationModel->checkAuthorization($request->phoneNumber);
 		if($authorization != null)
 		{
 			$expireOtp = $authorizationModel->expireOtp( $request->phoneNumber);
-			//echo "after expire";
 			if($expireOtp >= 0) 
 			{
-		
-	      		//echo "otp generation";
 	    		$string = '0123456789';
 	    		$string_shuffled = str_shuffle($string);
 	    		$password = substr($string_shuffled, 1, 6);
@@ -95,9 +91,7 @@ class AuthorizationAPI {
 	{
 	    $data = array();
 		$response = array();
-		//echo "userData";
 		$authorizationModel = $this->loadModel('AuthorizationModel');
-		
 		$authorization = $authorizationModel->checkAuthorization( $request->phoneNumber);
 		if($authorization != null)
 		{
@@ -118,46 +112,6 @@ class AuthorizationAPI {
 		return $response;
 	}
 	
-	
-	// public function userData($request)
-	// {
-	//     $data = array();
-	// 	$response = array();
-	// 	//echo "userData";
-	// 	$authorizationModel = $this->loadModel('AuthorizationModel');
-	// 	$validation = $authorizationModel->validateOtp($request->phoneNumber,$request->otp);
-	// 	if($validation != null)
-	// 	{
-	// 		$authorization = $authorizationModel->checkAuthorization( $request->phoneNumber);
-	// 		if($authorization != null)
-	// 		{
-	// 			$response[TAG_RESULT_CODE] = LOGIN_SUCCESS;
-	// 			$data["authorization"] = array();
-				
-	// 			$data["authorization"]["staff_id"] = $authorization[0]->staff_id;
-	// 		    $data["authorization"]["phone_number"] = $authorization[0]->phone_number;
-	// 		    $data["authorization"]["staff_name"] = $authorization[0]->staff_name;
-				
-				
-	// 		}
-	// 		else
-	// 		{
-	// 			$response[TAG_RESULT_CODE] = USER_DATA_FAIL;
-	// 			$data["msg"] = "Did not find staff details.";
-	// 		}
-
-	// 	}
-		
-	// 	else
-	// 	{
-	// 		//echo "outside validateOtp";
-	// 	  	$response[TAG_RESULT_CODE] = INVALID_OTP;
-	// 		$data["msg"] = "Otp you have entered is wrong.Please enter valid otp"; 
-			
-	// 	}
-	// 	$response["data"] = $data;
-	// 	return $response;
-	// }
 	
 	
 	

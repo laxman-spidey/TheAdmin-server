@@ -20,20 +20,10 @@ class AttendanceAPI {
     
     public function getAttendanceHistory($request)
     {
-    	var_dump($request);
-    	// $this->setRequestCodeHeaderToResponse();
-		echo "\nin function";
-		//load Attendance model
-		//$this->load->model('AttendanceModel');
 		$attendanceModel = $this->loadModel('AttendanceModel');
-		echo "\n loading model";
 		$history = null;
-		var_dump($request);
-		// echo "\nfromdate" .$request->from;
 		if(isset($request->from) && isset($request->to))
 		{
-			echo "\nfromdate". $request->from;
-			echo "\n in history params logic";
 			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
 		}
 		else
@@ -145,9 +135,6 @@ class AttendanceAPI {
 				}
 				else
 				{
-					
-					echo "in checkin not available logic";
-					// $attendance = $attendanceModel->insertCheckout($roaster->roaster_id,$request->staffId, $request->date, $request->timeOut);
 					$attendance = $attendanceModel->insertCheckout($roaster->roaster_id, $request->timeOut);
 					echo "in insert checkout call logic";
 					echo "\nattendanceId ".$attendance;
@@ -158,7 +145,7 @@ class AttendanceAPI {
 					}
 					else
 					{
-						$response[TAG_RESULT_CODE] = CHECKOUT_INSERT_DBERROR; //used same 
+						$response[TAG_RESULT_CODE] = CHECKOUT_INSERT_DBERROR;
 						$data["msg"] = "Something went wrong in registering your checkout. Please contact administrator";
 					}
 				}
@@ -166,13 +153,13 @@ class AttendanceAPI {
 			}
 			else
 			{
-				$response[TAG_RESULT_CODE] = INFO_WEEKOFF; //same
+				$response[TAG_RESULT_CODE] = INFO_WEEKOFF;
 				$data["msg"] = "It's your week off.Please contact administrator for registering attendance ";	
 			}
 		}
 		else 
 		{
-			$response[TAG_RESULT_CODE] = WARNING_ROASTER_DOES_NOT_EXIST; //same
+			$response[TAG_RESULT_CODE] = WARNING_ROASTER_DOES_NOT_EXIST; 
 			$data["msg"] = "You are not in roaster id.Please contact administrator to register your attendance";
 
 		}
@@ -185,22 +172,17 @@ class AttendanceAPI {
 	
 	public function getRoasterDetails($request)
 	{
-		//load Attendance model
-		//var_dump($request);
 		$data = array();
 		$response = array();
-		
 		$attendanceModel = $this->loadModel('AttendanceModel');
 		$roasterDetails = null;
-		echo "\nloading model";
 		if(isset($request->fromDate) && isset($request->toDate))
 		{
-			echo "\n in roaster params logic";
 			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
 		}
 		else
 		{
-			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId, $request->limit);
+			$roasterDetails = $attendanceModel->getRoasterDetails($request->staffId,$request->limit);
 		}
 		
 		if($roasterDetails == null)
@@ -215,18 +197,18 @@ class AttendanceAPI {
 			$data["count"] = count($roasterDetails);
 			$data["roasterDetails"] = array();
 			$index = 0;
-			// var_dump($roasterDetails);
 			foreach($roasterDetails as $row)
 			{
-			    $data["roasterDetails"][$index]["roaster_id"] = $row->roaster_id;
+			    $data["roasterDetails"][$index]["roasterId"] = $row->roaster_id;
 			    $data["roasterDetails"][$index]["date"] = $row->date;
-			    $data["roasterDetails"][$index]["shift_id"] = $row->shift_id;
+			    $data["roasterDetails"][$index]["shiftId"] = $row->shift_id;
 			    $data["roasterDetails"][$index]["shift"] = $row->shift;
 			    $data["roasterDetails"][$index]["description"] = $row->description;
 			    $data["roasterDetails"][$index]["shiftTimeIn"] = $row->shift_time_in;
 			    $data["roasterDetails"][$index]["shiftTimeOut"] = $row->shift_time_out;
 			    $data["roasterDetails"][$index]["timeIn"] = $row->time_in;
 			    $data["roasterDetails"][$index]["timeOut"] = $row->time_out;
+			    $data["roasterDetails"][$index]["leaveStatus"] = $row->leave_status;
 			    $index++;
 			}
 		}

@@ -147,9 +147,9 @@ class AttendanceModel extends CI_Model
         
     }
  
-    public function getRoasterDetails($staffId, $limit, $fromDate = null, $toDate = null)
+    public function getRoasterDetails1($staffId, $limit, $fromDate = null, $toDate = null)
     {
-        $this->db->select('r.roaster_id,date,r.shift_id,s.shift,s.description,s.time_in as shift_time_in,s.time_out as shift_time_out,a.time_in,a.time_out')
+        $this->db->select('r.roaster_id,r.date,r.shift_id,s.shift,s.description,s.time_in as shift_time_in,s.time_out as shift_time_out,a.time_in,a.time_out')
                 ->from('roaster r')
                 ->join('shift s', 'r.shift_id = s.shift_id')
                 ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
@@ -157,7 +157,7 @@ class AttendanceModel extends CI_Model
                 ->order_by('date','desc')
                 ->limit($limit);
         
-        echo $this->db->last_query();
+        //echo $this->db->last_query();
         if($fromDate != null)
         {
             $this->db->where('date >=', $fromDate);
@@ -166,7 +166,7 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        echo $this->db->last_query();
+        //echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -176,9 +176,44 @@ class AttendanceModel extends CI_Model
         {
             $roasterDetails1 = null;
         }
-        // echo $this->db->last_query();
+        //echo $this->db->last_query();
         return $roasterDetails1;
         
-    }   
+    } 
+    
+    public function getRoasterDetails($staffId,$limit,  $fromDate = null, $toDate = null)
+    {
+        $this->db->distinct()
+                ->select (' r.roaster_id,r.date,r.shift_id,s.shift,s.description,s.time_in as shift_time_in,s.time_out as shift_time_out,a.time_in,a.time_out,l.leave_status')
+                ->from('roaster r')
+                ->join('shift s', 'r.shift_id = s.shift_id')
+                ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
+                ->join('leaves l', 'r.staff_id = l.staff_id and  r.date = l. leave_date ','left outer')
+                ->where('r.date<=','date(DATE_ADD( NOW( ) , INTERVAL 3 DAY ))', FALSE)
+                ->where('r.staff_id', $staffId)
+                ->order_by('r.date','desc');
+                // ->limit($limit);
+        if($fromDate != null)
+        {
+            $this->db->where('date >=', $fromDate);
+        }
+        if($toDate != null)
+        {
+            $this->db->where('date <=', $toDate);
+        }
+        // echo $this->db->last_query();
+        $query = $this->db->get();
+        if($query->num_rows() > 0)
+        {
+            $roasterDetails1 = $query->result();
+        }
+        else 
+        {
+            $roasterDetails1 = null;
+        }
+        //echo $this->db->last_query();
+        return $roasterDetails1;
+        
+    }
 }
 ?>
