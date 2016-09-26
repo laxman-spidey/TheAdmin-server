@@ -110,6 +110,66 @@ class Apptest extends CI_Controller {
 		echo json_encode($response["data"]);
 	}
 	
+		public function applyLeave()
+	{
+		$request = $this->createLeaveApplyDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->applyLeave($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
+		public function checkLeave()
+	{
+		$request = $this->createLeaveCheckDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->checkLeave($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function leavesSummary()
+	{
+		$request = $this->createLeaveSummaryDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->leavesSummary($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function showSwap()
+	{
+		$request = $this->createShowSwapDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('SwapsAPI');
+		$response = $this->swapsapi->showSwap($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function applySwapByEligibility()
+	{
+		$request = $this->createApplySwapDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('SwapsAPI');
+		$response = $this->swapsapi->applySwapByEligibility($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
+	public function swapStatus()
+	{
+		$request = $this->createSwapStatusDummyRequest();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('SwapsAPI');
+		$response = $this->swapsapi->swapStatus($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
 	private function loadModel($model)
     {
     	$CI =& get_instance();
@@ -198,6 +258,76 @@ class Apptest extends CI_Controller {
 		$request["otp"] = 123456;
 		return Json_decode(json_encode($request));
 		
+	}
+	
+	private function createLeaveApplyDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "170";
+		$request = array();
+		$request["staffId"] = 1;
+		$request["leaveDate"] = "2016-09-21";
+ 		$request["leaveTypeID"] = 1;
+		
+		return Json_decode(json_encode($request));
+	}
+	
+	private function createLeaveCheckDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "180";
+		$request = array();
+		$request["staffId"] = 10;
+		$request["listLimit"] = 10;
+ 		$request["status"] = 0; //completed , pending
+		return Json_decode(json_encode($request));
+		
+	}
+	
+	private function createLeaveSummaryDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "190";
+		$request = array();
+		$request["staffId"] = 6;
+		
+		return Json_decode(json_encode($request));
+		
+	}
+	
+	private function createShowSwapDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "200";
+		$request = array();
+		$request["swapDate"] = "2016-09-12";
+		$request["shiftId"] = 1;
+ 	
+		
+		return Json_decode(json_encode($request));
+	}
+	
+	private function createApplySwapDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "210";
+		$request = array();
+		$request["reqRoasterId"] = 14;
+		$request["reqShiftId"] = 2;
+		$request["reqSwapDate"] = '2016-09-22';
+		$request["reqSwapTo"] = 3;
+ 		$request["staffId"] = 6;
+ 		// $request["acceptedRoasterId"] = 13;
+		
+		return Json_decode(json_encode($request));
+	}
+	
+	private function createSwapStatusDummyRequest()
+	{
+		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "220";
+		$request = array();
+		$request["swapStatus"] = 5;
+ 		$request["acceptStaffId"] = 5;
+		$request["reqSwapDate"] = '2016-09-22';
+		$request["reqRoasterId"] = 14;
+		$request["acceptRoasterId"] = 13;
+		$request["reqSwapId"] = 26;
+		return Json_decode(json_encode($request));
 	}
 	
 	private function setRequestCodeHeaderToResponse()

@@ -188,7 +188,7 @@ class AttendanceModel extends CI_Model
                 ->from('roaster r')
                 ->join('shift s', 'r.shift_id = s.shift_id')
                 ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
-                ->join('leaves l', 'r.staff_id = l.staff_id and  r.date = l. leave_date ','left outer')
+                ->join('leave l', 'r.staff_id = l.staff_id and  r.date = l. leave_date ','left outer')
                 ->where('r.date<=','date(DATE_ADD( NOW( ) , INTERVAL 3 DAY ))', FALSE)
                 ->where('r.staff_id', $staffId)
                 ->order_by('r.date','desc');

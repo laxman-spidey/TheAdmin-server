@@ -1,5 +1,5 @@
 <?php
-class LeaveModel extends CI_Model 
+class LeavesModel extends CI_Model 
 {
     
     
@@ -31,12 +31,12 @@ class LeaveModel extends CI_Model
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            echo "has a row";
+            // echo "has a row";
             $LeaveId = 0;
         }
         else 
         {
-            echo "no rows";
+            // echo "no rows";
             $LeaveId = -1;
         }
         return $LeaveId;
@@ -53,12 +53,12 @@ class LeaveModel extends CI_Model
         if($query->num_rows() > 0)
         {
             $leaves = $query->result();
-            echo "has a row";
+            // echo "has a row";
             $countId = 0;
         }
         else 
         {
-            echo "no rows";
+            // echo "no rows";
             $countId = -1;
             $leaves = null;
         }
@@ -77,12 +77,12 @@ class LeaveModel extends CI_Model
         if($query->num_rows() > 0)
         {
             $leavesData = $query->result();
-            echo "has a row";
+            // echo "has a row";
             $summaryId = 0;
         }
         else 
         {
-            echo "no rows";
+            // echo "no rows";
             $summaryId = -1;
             $leavesData = null;
         }
