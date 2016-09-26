@@ -10,21 +10,32 @@ class Swaps extends CI_Controller {
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
+	 * 		http://example.com/index.php/Swaps
 	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
+	 * 		http://example.com/index.php/Swaps/index
 	 *	- or -
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://example.com/
 	 *
 	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
+	 * map to /index.php/Swaps/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index()
 	{
 		$this->load->view('welcome_message');
 	}
+	
+	/**
+	*	@url:		/Swaps/showSwap
+	*	@function:	To display the eligible swap details for the user for the requested shift id
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: staffId , swapDate
+	*	@responseCodes: SHOW_SWAP_AVAILABLE: 201
+	*					SHOW_SWAP_UNAVAILABLE: 202
+	*	
+	*/
 	
 	public function showSwap()
 	{
@@ -36,6 +47,19 @@ class Swaps extends CI_Controller {
 		echo json_encode($response["data"]);
 	}
 	
+	
+	/**
+	*	@url:		/Swaps/applySwapByEligibility
+	*	@function:	To apply swap if the requested user is eligible for swapping, based on max swap rules
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: reqRoasterId , reqShiftId, reqSwapDate, reqSwapTo, staffId
+	*	@responseCodes: APPLY_SWAP_BY_ELIGIBILITY_SUCCESS: 211
+	*					APPLY_SWAP_BY_ELIGIBILITY_FAIL: 212
+	*					APPLY_SWAP_BY_ELIGIBILITY_SWAPS_COMPLETED: 213
+	*	
+	*/
+	
 	public function applySwapByEligibility()
 	{
 		$request = $this->getRequestData();
@@ -45,6 +69,18 @@ class Swaps extends CI_Controller {
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
+	
+	
+	/**
+	*	@url:		/Swaps/swapStatus
+	*	@function:	To update the swap status and roaster details if any one accepts the users swap request
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: reqRoasterId , acceptRoasterId, reqSwapDate, reqSwapId, swapStatus, acceptStaffId
+	*	@responseCodes: SWAP_STATUS_SUCCESS: 221
+	*					SWAP_STATUS_FAIL: 222
+	* 
+	*/
 	
 	public function swapStatus()
 	{
@@ -56,58 +92,6 @@ class Swaps extends CI_Controller {
 		echo json_encode($response["data"]);
 	}
 	
-	
-	// public function applyswap()
-	// {
-	// 	echo "applyswap";
-	// 	//$request = $this->getRequestData();
-	// 	$request = $this->createApplySwapDummyRequest();
-	// 	$this->setRequestCodeHeaderToResponse(604);
-	// 	$response = array();
-	// 	$this->load->model('SwapModel');
-	// 	$success = $this->SwapModel->applySwap( $request->reqRoasterId,$request->reqShiftId,$request->reqSwapDate, $request->reqSwapTo );
-	// 	if($success == 0)
-	// 	{
-			
-	// 	    $this->setResultCode(605);
-	// 			$response["msg"] = "swap request submitted Successfully.";
-	// 	}
-		
-	// 	else
-	// 	{
-				
-	// 	  	$this->setResultCode(606);
-	// 		$response["msg"] = "swap request submission failed.";
-			
-	// 	}
-	// 	echo json_encode($response);
-	// }
-// public function swapeligibility()
-// 	{
-// 		echo "swapeligibility";
-// 		//$request = $this->getRequestData();
-// 		$request = $this->createSwapEligibilityDummyRequest();
-// 		$this->setRequestCodeHeaderToResponse(607);
-// 		$response = array();
-// 		$this->load->model('SwapModel');
-// 		$eligibility = $this->SwapModel->swapEligibility($request->staffId);
-// 		if($eligibility != null)
-// 		{
-			
-// 		    $this->setResultCode(608);
-// 				$response["msg"] = "Eligible for swapping.";
-// 		}
-		
-// 		else
-// 		{
-				
-// 		  	$this->setResultCode(609);
-// 			$response["msg"] = "you have crossed the swap limit.";
-			
-// 		}
-// 		echo json_encode($response);
-// 	}
-		
 	
 	 
 	private function getRequestData()
@@ -128,17 +112,5 @@ class Swaps extends CI_Controller {
 	{				
 		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
-	
-	/* creates dummy Leave request */
-	
-	
-		private function createSwapEligibilityDummyRequest()
-	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "600";
-		$request = array();
-		$request["staffId"] = 1;
-		return Json_decode(json_encode($request));
-	}
-	
 	
 }

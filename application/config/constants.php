@@ -95,6 +95,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('TAG_HTTP_REQUEST_CODE') OR define('TAG_HTTP_REQUEST_CODE', "HTTP_REQUESTCODE");
 defined('TAG_REQUEST_CODE')      OR define('TAG_REQUEST_CODE', "requestCode");
 defined('TAG_RESULT_CODE')       OR define('TAG_RESULT_CODE', "resultCode");
+defined('WEEKOFF_SHIFTID')       OR define('WEEKOFF_SHIFTID', 4); // constant defined for week off 
 
 defined('PRO_SUCCESS')          OR define('PRO_SUCCESS', TRUE); // Request successfully proccessed.
 defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request processing failed.
@@ -102,7 +103,7 @@ defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request proce
 
 // Response Codes for check in
 
-defined('CHECKIN_ALREADY_CHECKEDIN')    OR define('CHECKIN_ALREADY_CHECKEDIN', 101); //already checkin
+defined('CHECKIN_ALREADY_CHECKEDIN')    OR define('CHECKIN_ALREADY_CHECKEDIN', 101); //already checkin for the day
 defined('CHECKIN_SUCCESS')    OR define('CHECKIN_SUCCESS', 102); // checkin inserted succesfully
 defined('CHECKIN_INSERT_DBERROR')    OR define('CHECKIN_INSERT_DBERROR', 103); // checkin deosnot inserted
 defined('INFO_WEEKOFF')    OR define('INFO_WEEKOFF', 104); // weekoff of staffid.contact administrator to register attendance
@@ -126,7 +127,7 @@ defined('ATTENDANCE_HISTORY_NOT_EXIST')    OR define('ATTENDANCE_HISTORY_NOT_EXI
 defined('ATTENDANCE_HISTORY_EXIST')    OR define('ATTENDANCE_HISTORY_EXIST', 132); // attendance details found in given limit
 
 
-// Response Codes for checking authorization and expiring unused OTP
+// Response Codes for  verifying Phone number and expiring unused OTP
 
 defined('CHECK_AUTHORIZATION_SUCCESS')    OR define('CHECK_AUTHORIZATION_SUCCESS', 141); // Found staff details with phone number
 defined('CHECK_AUTHORIZATION_FAIL')    OR define('CHECK_AUTHORIZATION_FAIL', 142); // Doesnot found staff details with phone number

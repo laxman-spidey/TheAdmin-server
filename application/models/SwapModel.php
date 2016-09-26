@@ -9,36 +9,6 @@ class SwapModel extends CI_Model
     }
     
     
-    // public function applySwap($reqRoasterId,$reqShiftId,$reqSwapDate,$reqSwapTo)
-    // {
-    //     //echo "------------------".$leaveTypeID."----------";
-    //     $data = array(
-    //             'roaster_id_requested' => $reqRoasterId,
-    //             'shift_id_requested' => $reqShiftId,
-                
-    //             'roaster_id_accepted' => $reqRoasterId
-    //         );
-    //     $this->db->insert('swap_request',$data);
-    //     $swapId = $this->db->insert_id();
-        
-    //     //sent to table
-    //     $data1 = array(
-    //         'staff_id_sent_to' => $reqSwapTo,
-    //         'swap_id' => $swapId
-    //         );
-    //     $this->db->insert('swap_request_sent',$data1);
-    //     $swapIdto = $this->db->insert_id();
-        
-    //     if($swapId > 0  && $swapIdto > 0)
-    //     {
-    //         return 0;
-    //     }
-    //     else
-    //     {
-    //         return 1;
-    //     }
-    // }
-    
     public function availableSwap( $swapDate,$shiftId)
     {
         $this->db->select("staff_id,date")
@@ -64,33 +34,8 @@ class SwapModel extends CI_Model
         }
         return $showSwap;
     }
-    // public function swapEligibility($staffId)
-    // {
-    //     $this->db->select("count(*) as count")
-    //             ->from('roaster')
-                
-    //             ->where('staff_id',$staffId)
-    //             ->where('MONTH(date)=',date('m'))
-    //             ->where('swap_status=',0)
-    //             ->group_by('staff_id')
-    //             ->having('count<(select max_swaps_per_month FROM swap_rule)')
-    //             ;
-    //     $query = $this->db->get();
-    //     echo $this->db->last_query();
-    //     if($query->num_rows() > 0)
-    //     {
-    //         echo "has a row";
-    //         $eligibility = $query->result();
-    //         $eligibilityId = 0;
-    //     }
-    //     else 
-    //     {
-    //         echo "no rows";
-    //         $eligibilityId = -1;
-    //         $eligibility = null;
-    //     }
-    //     return $eligibility;
-    // }
+    
+    
         public function swapEligibility($staffId)
         
     {

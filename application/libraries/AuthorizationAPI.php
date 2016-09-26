@@ -18,7 +18,18 @@ class AuthorizationAPI {
 		return $CI->$model;
     }
     
-    public function checkauthorization($request)
+    
+	 /**
+	*	@function:	To check if the user is valid staff or not.If valid sends OTP to authorize the login credentials.
+	*	@type:		POST
+	*	@in-params: phoneNumber
+	*	@responseCodes: CHECK_AUTHORIZATION_SUCCESS: 141
+	*					CHECK_AUTHORIZATION_FAIL: 142
+	*					CHECK_AUTHORIZATION_EXPIRATION_UPDATE_FAIL: 143
+	*	
+	*/
+	
+    public function verifyPhone($request)
 	{
 	    $data = array();
 		$response = array();
@@ -55,6 +66,17 @@ class AuthorizationAPI {
 		return $response;
 	}
 	
+	/**
+	*	@function:  To validate the login credentials of user , retrieves the user data and updates the Otp status if valid
+	*	@type:		POST
+	*	@in-params: phoneNumber , Otp
+	*	@responseCodes: VALIDATE_OTP_STATUS_UPDATE_SUCCESS: 161
+	*					VALIDATE_OTP_STATUS_UPDATE_FAIL: 162
+	*					INVALID_OTP: 163
+	*	
+	*	
+	*/
+	
 	public function validateotp($request)
 	{
 	    $data = array();
@@ -87,6 +109,17 @@ class AuthorizationAPI {
 		return $response;
 	}
 	
+	
+	/**
+	*	@function:	To validate the login credentials of user
+	*	@type:		POST
+	*	@in-params: phoneNumber , Otp
+	*	@responseCodes: LOGIN_SUCCESS: 151
+	*					USER_DATA_SUCCESS: 152
+	*					USER_DATA_FAIL: 153
+	*/
+	
+	
 	public function userData($request)
 	{
 	    $data = array();
@@ -111,8 +144,5 @@ class AuthorizationAPI {
 		$response["data"] = $data;
 		return $response;
 	}
-	
-	
-	
 	
 }

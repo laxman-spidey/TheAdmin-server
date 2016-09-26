@@ -18,6 +18,15 @@ class SwapsAPI {
 		return $CI->$model;
     }
     
+    /**
+	*	@function:	To display the eligible swap details for the user for the requested shift id
+	*	@type:		POST
+	*	@in-params: staffId , swapDate
+	*	@responseCodes: SHOW_SWAP_AVAILABLE: 201
+	*					SHOW_SWAP_UNAVAILABLE: 202
+	*	
+	*/
+	
     public function showSwap($request)
 	{
 		$data = array();
@@ -48,6 +57,16 @@ class SwapsAPI {
 		return $response;
 		
 	}
+	
+	/**
+	*	@function:	To apply swap if the requested user is eligible for swapping, based on max swap rules
+	*	@type:		POST
+	*	@in-params: reqRoasterId , reqShiftId, reqSwapDate, reqSwapTo, staffId
+	*	@responseCodes: APPLY_SWAP_BY_ELIGIBILITY_SUCCESS: 211
+	*					APPLY_SWAP_BY_ELIGIBILITY_FAIL: 212
+	*					APPLY_SWAP_BY_ELIGIBILITY_SWAPS_COMPLETED: 213
+	*	
+	*/
 	
 	public function applySwapByEligibility($request)
 	{
@@ -82,6 +101,16 @@ class SwapsAPI {
 		$response["data"] = $data;
 		return $response;
 	}
+	
+	/**
+	*	@function:	To update the swap status and roaster details if any one accepts the users swap request
+	*	@type:		POST
+	*	@in-params: reqRoasterId , acceptRoasterId, reqSwapDate, reqSwapId, swapStatus, acceptStaffId
+	*	@responseCodes: SWAP_STATUS_SUCCESS: 221
+	*					SWAP_STATUS_FAIL: 222
+	* 
+	*/
+	
 	
 	public function swapStatus($request)
 	{

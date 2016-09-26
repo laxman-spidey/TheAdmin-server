@@ -7,6 +7,11 @@ class Apptest extends CI_Controller {
 	public $TAG_REQUEST_CODE = "requestCode";
 	public $TAG_RESULT_CODE = "resultCode";
 	public $WEEKOFF_SHIFTID = '4';
+	
+	/**
+	 * This Page is  used for testing purpose with dummy requests.
+	 * 
+	 */
 
 	/**
 	 * Index Page for this controller.
@@ -79,12 +84,12 @@ class Apptest extends CI_Controller {
 		echo json_encode($response["data"]);
 	}
 	
-	public function checkauthorization()
+	public function verifyPhone()
 	{
 		$request = $this->createAuthorizationDummyRequest();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
-		$response = $this->authorizationapi->checkauthorization($request);
+		$response = $this->authorizationapi->verifyPhone($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}

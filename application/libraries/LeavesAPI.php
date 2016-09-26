@@ -18,7 +18,16 @@ class LeavesAPI {
 		return $CI->$model;
     }
     
-    	
+     /**
+	*	@function:	To apply Leave by the user ,not applicable if the user is already on leave.
+	*	@type:		POST
+	*	@in-params: staffId , leaveDate , leaveTypeID
+	*	@responseCodes: APPLY_LEAVE_ALREADY_ON_LEAVE: 171
+	*					APPLY_LEAVE_SUCCESS: 172
+	*					APPLY_LEAVE_FAIL: 173
+	*	
+	*/
+	
 	public function applyLeave($request)
 	{
 		$data = array();
@@ -50,6 +59,15 @@ class LeavesAPI {
 		
 	}
 	
+	/**
+	*	@function:	To display number of leaves available for the user
+	*	@type:		POST
+	*	@in-params: staffId , listLimit , status if 0 
+	*	@responseCodes: CHECK_LEAVE_EXISTS: 181
+	*					CHECK_LEAVE_DOES_NOT_EXIST: 182
+	*	
+	*/
+	
 		public function checkLeave($request)
 	{
 		$data = array();
@@ -73,6 +91,15 @@ class LeavesAPI {
 		return $response;
 	}
     
+    /**
+	*	@function:	To retrieve the leave details of the user
+	*	@type:		POST
+	*	@in-params: staffId 
+	*	@responseCodes: LEAVE_SUMMARY_EXISTS: 191
+	*					LEAVE_SUMMARY_DOES_NOT_EXIST: 192
+	*	
+	*/
+	
     public function leavesSummary($request)
 	{
 	    $data = array();
