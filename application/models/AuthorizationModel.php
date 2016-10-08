@@ -66,18 +66,19 @@ class AuthorizationModel extends CI_Model
                 
                 ;
         $query = $this->db->get();
+        //echo $this->db->last_query();
+        
         if($query->num_rows() > 0)
         {
             $validation = $query->result();
             $validationId = 0;
         }
-        else 
-        
+        else
         {
             $validationId = -1;
             $validation = null;
         }
-        echo $this->db->last_query();
+        // echo $this->db->last_query();
         return $validation;
     }
      
@@ -106,7 +107,7 @@ class AuthorizationModel extends CI_Model
     }
     public function otpGeneration( $phoneNumber, $password)
     {
-        $password = "123456";
+        //$password = "123456";
         $query ="select staff_id from staff where phone_number=$phoneNumber";
         $query = $this->db->query($query);
         foreach ($query->result() as $row)  

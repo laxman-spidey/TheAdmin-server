@@ -95,6 +95,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 defined('TAG_HTTP_REQUEST_CODE') OR define('TAG_HTTP_REQUEST_CODE', "HTTP_REQUESTCODE");
 defined('TAG_REQUEST_CODE')      OR define('TAG_REQUEST_CODE', "requestCode");
 defined('TAG_RESULT_CODE')       OR define('TAG_RESULT_CODE', "resultCode");
+defined('WEEKOFF_SHIFTID')       OR define('WEEKOFF_SHIFTID', 4); // constant defined for week off 
 
 defined('PRO_SUCCESS')          OR define('PRO_SUCCESS', TRUE); // Request successfully proccessed.
 defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request processing failed.
@@ -102,7 +103,7 @@ defined('PRO_FAILED')           OR define('PRO_FAILED', FALSE); // Request proce
 
 // Response Codes for check in
 
-defined('CHECKIN_ALREADY_CHECKEDIN')    OR define('CHECKIN_ALREADY_CHECKEDIN', 101); //already checkin
+defined('CHECKIN_ALREADY_CHECKEDIN')    OR define('CHECKIN_ALREADY_CHECKEDIN', 101); //already checkin for the day
 defined('CHECKIN_SUCCESS')    OR define('CHECKIN_SUCCESS', 102); // checkin inserted succesfully
 defined('CHECKIN_INSERT_DBERROR')    OR define('CHECKIN_INSERT_DBERROR', 103); // checkin deosnot inserted
 defined('INFO_WEEKOFF')    OR define('INFO_WEEKOFF', 104); // weekoff of staffid.contact administrator to register attendance
@@ -126,7 +127,7 @@ defined('ATTENDANCE_HISTORY_NOT_EXIST')    OR define('ATTENDANCE_HISTORY_NOT_EXI
 defined('ATTENDANCE_HISTORY_EXIST')    OR define('ATTENDANCE_HISTORY_EXIST', 132); // attendance details found in given limit
 
 
-// Response Codes for checking authorization and expiring unused OTP
+// Response Codes for  verifying Phone number and expiring unused OTP
 
 defined('CHECK_AUTHORIZATION_SUCCESS')    OR define('CHECK_AUTHORIZATION_SUCCESS', 141); // Found staff details with phone number
 defined('CHECK_AUTHORIZATION_FAIL')    OR define('CHECK_AUTHORIZATION_FAIL', 142); // Doesnot found staff details with phone number
@@ -143,3 +144,46 @@ defined('USER_DATA_FAIL')    OR define('USER_DATA_FAIL', 153); // Doesnot found 
 defined('VALIDATE_OTP_STATUS_UPDATE_SUCCESS')    OR define('VALIDATE_OTP_STATUS_UPDATE_SUCCESS', 161); // used OTP status update success
 defined('VALIDATE_OTP_STATUS_UPDATE_FAIL')    OR define('VALIDATE_OTP_STATUS_UPDATE_FAIL', 162); // used OTP status update failed
 defined('INVALID_OTP')    OR define('INVALID_OTP', 163); // Entered invalid OTP
+
+// Response codes for applying leave
+
+defined('APPLY_LEAVE_ALREADY_ON_LEAVE')    OR define('APPLY_LEAVE_ALREADY_ON_LEAVE', 171); // staff id already on leave on the date appllied for leave
+defined('APPLY_LEAVE_SUCCESS')    OR define('APPLY_LEAVE_SUCCESS', 172); // leave applied succesfully for the day and staffid
+defined('APPLY_LEAVE_FAIL')    OR define('APPLY_LEAVE_FAIL', 173); //leave not applied due to some db error 
+
+// Response codes for checking number of leaves available
+
+defined('CHECK_LEAVE_EXISTS')    OR define('CHECK_LEAVE_EXISTS', 181); //leaves available 
+defined('CHECK_LEAVE_DOES_NOT_EXIST')    OR define('CHECK_LEAVE_DOES_NOT_EXIST', 182); //leaves completed not available
+
+// Response Codes for getting leaves summary
+
+defined('LEAVE_SUMMARY_EXISTS')    OR define('LEAVE_SUMMARY_EXISTS', 191); //leaves summary available
+defined('LEAVE_SUMMARY_DOES_NOT_EXIST')    OR define('LEAVE_SUMMARY_DOES_NOT_EXIST', 192); //leaves summary not available no records found
+
+// Response codes to check if swap is available
+
+defined('SHOW_SWAP_AVAILABLE')    OR define('SHOW_SWAP_AVAILABLE', 201); // swap available
+defined('SHOW_SWAP_UNAVAILABLE')    OR define('SHOW_SWAP_UNAVAILABLE', 202); // swap unavailable
+
+// Response codes to apply swap by eligibility
+
+defined('APPLY_SWAP_BY_ELIGIBILITY_SUCCESS')    OR define('APPLY_SWAP_BY_ELIGIBILITY_SUCCESS', 211); // swap request submitted succesfully and eligible
+defined('APPLY_SWAP_BY_ELIGIBILITY_FAIL')    OR define('APPLY_SWAP_BY_ELIGIBILITY_FAIL', 212); // swap request ubmission failed but eligible
+defined('APPLY_SWAP_BY_ELIGIBILITY_SWAPS_COMPLETED')    OR define('APPLY_SWAP_BY_ELIGIBILITY_SWAPS_COMPLETED', 213); // uneligible for swap
+
+// Response codes to update swap status of swap request
+
+defined('SWAP_STATUS_SUCCESS')    OR define('SWAP_STATUS_SUCCESS', 221); // swap request status updated succesfully 
+defined('SWAP_STATUS_FAIL')    OR define('SWAP_STATUS_FAIL', 222); // swap request status updation failed
+
+
+
+
+
+
+
+
+
+
+

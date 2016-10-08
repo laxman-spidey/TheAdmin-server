@@ -9,36 +9,6 @@ class SwapModel extends CI_Model
     }
     
     
-    // public function applySwap($reqRoasterId,$reqShiftId,$reqSwapDate,$reqSwapTo)
-    // {
-    //     //echo "------------------".$leaveTypeID."----------";
-    //     $data = array(
-    //             'roaster_id_requested' => $reqRoasterId,
-    //             'shift_id_requested' => $reqShiftId,
-                
-    //             'roaster_id_accepted' => $reqRoasterId
-    //         );
-    //     $this->db->insert('swap_request',$data);
-    //     $swapId = $this->db->insert_id();
-        
-    //     //sent to table
-    //     $data1 = array(
-    //         'staff_id_sent_to' => $reqSwapTo,
-    //         'swap_id' => $swapId
-    //         );
-    //     $this->db->insert('swap_request_sent',$data1);
-    //     $swapIdto = $this->db->insert_id();
-        
-    //     if($swapId > 0  && $swapIdto > 0)
-    //     {
-    //         return 0;
-    //     }
-    //     else
-    //     {
-    //         return 1;
-    //     }
-    // }
-    
     public function availableSwap( $swapDate,$shiftId)
     {
         $this->db->select("staff_id,date")
@@ -49,48 +19,23 @@ class SwapModel extends CI_Model
                 
                 ;
         $query = $this->db->get();
-        echo $this->db->last_query();
+        // echo $this->db->last_query();
         if($query->num_rows() > 0)
         {
-            echo "has a row";
+            // echo "has a row";
             $showSwap = $query->result();
             $showswapId = 0;
         }
         else 
         {
-            echo "no rows";
+            // echo "no rows";
             $showswapId = -1;
             $showSwap = null;
         }
         return $showSwap;
     }
-    // public function swapEligibility($staffId)
-    // {
-    //     $this->db->select("count(*) as count")
-    //             ->from('roaster')
-                
-    //             ->where('staff_id',$staffId)
-    //             ->where('MONTH(date)=',date('m'))
-    //             ->where('swap_status=',0)
-    //             ->group_by('staff_id')
-    //             ->having('count<(select max_swaps_per_month FROM swap_rule)')
-    //             ;
-    //     $query = $this->db->get();
-    //     echo $this->db->last_query();
-    //     if($query->num_rows() > 0)
-    //     {
-    //         echo "has a row";
-    //         $eligibility = $query->result();
-    //         $eligibilityId = 0;
-    //     }
-    //     else 
-    //     {
-    //         echo "no rows";
-    //         $eligibilityId = -1;
-    //         $eligibility = null;
-    //     }
-    //     return $eligibility;
-    // }
+    
+    
         public function swapEligibility($staffId)
         
     {
@@ -104,16 +49,16 @@ class SwapModel extends CI_Model
                 ->having('count<(select max_swaps_per_month FROM swap_rule)')
                 ;
         $query = $this->db->get();
-        echo $this->db->last_query();
+        // echo $this->db->last_query();
         if($query->num_rows() > 0)
         {
-            echo "has a row";
+            // echo "has a row";
             $eligibility = $query->result();
             $eligibilityId = 0;
         }
         else 
         {
-            echo "no rows";
+            // echo "no rows";
             $eligibilityId = -1;
             $eligibility = null;
         }
@@ -168,8 +113,8 @@ class SwapModel extends CI_Model
         $this->db->where('roaster_id',$reqRoasterId);
         $this->db->update('roaster', $data);
         
-        echo $this->db->last_query();
-        echo "<br />";
+        // echo $this->db->last_query();
+        // echo "<br />";
         //$roastertoupdate  = array($reqRoasterId,$acceptRoasterId);
         //$this->db->where_in('roaster_id',$roastertoupdate)
         // where('staff_id',$acceptStaffId)
@@ -178,10 +123,10 @@ class SwapModel extends CI_Model
         //  $this->db->set("shift_id = select shift_id_requested from swap_request where swap_id = $reqSwapId");
          
         $swapSatusId1 = $this->db->update('roaster',$data);
-        echo $this->db->last_query();
+        // echo $this->db->last_query();
         $query = $this->db->query($query);
-        echo $this->db->last_query();
-        echo "<br />";
+        // echo $this->db->last_query();
+        // echo "<br />";
         $index = 0;
         $reqOriginalShiftId = 0;
         $acceptedOriginalShiftId = 0;
@@ -204,8 +149,8 @@ class SwapModel extends CI_Model
         $this->updateShiftIdInRoaster($acceptRoasterId, $reqOriginalShiftId);
         
         
-        echo 'Total Results: ' . $query->num_rows();
-        echo $this->db->last_query();
+        // echo 'Total Results: ' . $query->num_rows();
+        // echo $this->db->last_query();
         // $swapSatusId = $this->db->insert_id();
         
         //sent to table
@@ -233,8 +178,8 @@ class SwapModel extends CI_Model
         $this->db->set('shift_id', $shiftId);
         $this->db->where('roaster_id', $roasterId);
         $success = $this->db->update('roaster');
-        echo $this->db->last_query();
-        echo "<br />";
+        // echo $this->db->last_query();
+        // echo "<br />";
                 
         if($success)
         {

@@ -18,11 +18,24 @@ class AttendanceAPI {
 		return $CI->$model;
     }
     
+    
+	/**
+	*	@function:	To retrive the attendance of the user based on limit entered.
+	*	@type:		POST
+	*	@in-params: staffId, limit 
+	*	@responseCodes: ATTENDANCE_HISTORY_NOT_EXIST:131
+	*					ATTENDANCE_HISTORY_EXIST:132
+	*	
+	*/
+	
+	
     public function getAttendanceHistory($request)
     {
+    	$data = array();
+		$response = array();
 		$attendanceModel = $this->loadModel('AttendanceModel');
 		$history = null;
-		if(isset($request->from) && isset($request->to))
+		if(isset($request->fromDate) && isset($request->toDate))
 		{
 			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
 		}
@@ -30,7 +43,6 @@ class AttendanceAPI {
 		{
 			$history = $attendanceModel->getHistory($request->staffId, $request->limit);
 		}
-		$data = array();
 		if($history == null)
 		{
 			$response[TAG_RESULT_CODE] = ATTENDANCE_HISTORY_NOT_EXIST;
@@ -57,6 +69,19 @@ class AttendanceAPI {
 	}
 	
 	
+	/**
+	*	@function:	when the user is entered work location and checks in the time for the day.
+	*	@type:		POST
+	*	@in-params: staffId, shiftId, date, timeIn 
+	*	@responseCodes: CHECKIN_ALREADY_CHECKEDIN:101
+	*					CHECKIN_SUCCESS:102 
+	*					CHECKIN_INSERT_DBERROR:103
+	*					INFO_WEEKOFF:104
+	*					WARNING_ROASTER_DOES_NOT_EXIST:105
+	*	
+	*/
+	
+	
 	public function checkin($request)
 	{
 		$data = array();
@@ -68,7 +93,6 @@ class AttendanceAPI {
 			//handling if the user is on week off
 			if($roaster->shift_id != $attendanceModel->WEEKOFF_SHIFTID)
 			{
-				echo "roaster id fetched";
 				$checkedInAlready = $attendanceModel->isCheckedInAlready($roaster->roaster_id);
 				if($checkedInAlready != null)
 				{
@@ -82,7 +106,7 @@ class AttendanceAPI {
 					if($attendanceId > 0)
 					{
 						$response[TAG_RESULT_CODE] = CHECKIN_SUCCESS;
-						$data["msg"] = "Attendance registered Successfully.";
+						$data["msg"] = "Checked in Successfully.";
 					}
 					else
 					{
@@ -105,6 +129,19 @@ class AttendanceAPI {
 		$response["data"] = $data;
 		return $response;
 	}
+	
+	
+	/**
+	*	@function:	when the user is leaving from work location and checks out the time for the day.
+	*	@type:		POST
+	*	@in-params: staffId, date, timeOut
+	*	@responseCodes: CHECKOUT_SUCCESS:111
+	*					CHECKOUT_INSERT_DBERROR:112 
+	*					CHECKOUT_NOT_CHECKEDIN:113
+	*					CHECKOUT_INSERT_DBERROR:114
+	*	
+	*/
+	
 	
 	public function checkout($request)
 	{
@@ -136,8 +173,6 @@ class AttendanceAPI {
 				else
 				{
 					$attendance = $attendanceModel->insertCheckout($roaster->roaster_id, $request->timeOut);
-					echo "in insert checkout call logic";
-					echo "\nattendanceId ".$attendance;
 					if($attendance > 0)
 					{
 						$response[TAG_RESULT_CODE] = CHECKOUT_NOT_CHECKEDIN;
@@ -169,6 +204,15 @@ class AttendanceAPI {
 			
 			
 	}
+	
+	/**
+	*	@function:	To retrieve the roaster details of user for 5days (today, past 2 days and future 2 days)
+	*	@type:		POST
+	*	@in-params: staffId, limit 
+	*	@responseCodes: ROASTER_DETAILS_NOT_EXIST: 121
+	*					ROASTER_DETAILS_EXIST: 122
+	*	
+	*/
 	
 	public function getRoasterDetails($request)
 	{

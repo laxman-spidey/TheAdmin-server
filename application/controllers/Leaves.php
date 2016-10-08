@@ -10,15 +10,15 @@ class Leaves extends CI_Controller {
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
+	 * 		http://example.com/index.php/Leaves
 	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
+	 * 		http://example.com/index.php/Leaves/index
 	 *	- or -
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://example.com/
 	 *
 	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
+	 * map to /index.php/Leaves/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index()
@@ -26,99 +26,72 @@ class Leaves extends CI_Controller {
 		$this->load->view('welcome_message');
 	}
 	
-	public function applyleave()
+	
+	 /**
+	*	@url:		/Leaves/applyLeave
+	*	@function:	To apply Leave by the user ,not applicable if the user is already on leave.
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: staffId , leaveDate , leaveTypeID
+	*	@responseCodes: APPLY_LEAVE_ALREADY_ON_LEAVE: 171
+	*					APPLY_LEAVE_SUCCESS: 172
+	*					APPLY_LEAVE_FAIL: 173
+	*	
+	*/
+	
+	public function applyLeave()
 	{
-		echo "applyleave";
-		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest();
-		$this->setRequestCodeHeaderToResponse(301);
-		$response = array();
-		$this->load->model('LeaveModel');
-		$applyleave = $this->LeaveModel->isOnLeaveAlready($request->staffId, $request->leaveDate);
-		if($applyleave != -1)
-		{
-			$this->setResultCode(301);
-			$response["msg"] = "You are already on leave "; //.$attendance[0]->time_in;
-		}
-		else
-		{
-		    
-			$LeaveId = $this->LeaveModel->insertLeave($request->staffId, $request->leaveDate, $request->leaveTypeID);	
-			echo "\nLeaveId ". $LeaveId;
-			if($LeaveId > 0)
-			{
-				$this->setResultCode(302);
-				$response["msg"] = "leave applied succesfully.";
-			}
-			else
-			{
-				$this->setResultCode(303);
-				$response["msg"] = "Error 102: Something went wrong. Try again or report the issue to admin";
-			}
-		}
-		echo json_encode($response);
-		
-
-		
+		$request = $this->getRequestData();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->applyLeave($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
 	}
-	public function checkleave()
+	
+	 /**
+	*	@url:		/Leaves/checkLeave
+	*	@function:	To display number of leaves available for the user
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: staffId , listLimit , status if 0 
+	*	@responseCodes: CHECK_LEAVE_EXISTS: 181
+	*					CHECK_LEAVE_DOES_NOT_EXIST: 182
+	*	
+	*/
+	
+	public function checkLeave()
 	{
-		echo "checkleave";
-		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest1();
-		$this->setRequestCodeHeaderToResponse(401);
-		$response = array();
-		$this->load->model('LeaveModel');
-		$leaves = $this->LeaveModel->countLeave($request->staffId, $request->listLimit,$request->status );
-		if($leaves != null)
-		{
-		    //var_dump($leaves);
-			$this->setResultCode(402);
-			//$response["msg"] = "You have these many leaves "; //.$attendance[0]->time_in;
-		}
-		
-		else
-		{
-		  	$this->setResultCode(403);
-			$response["count"] = 0; //.$attendance[0]->time_in;
-			
-		}
-		echo json_encode($response);
+		$request = $this->getRequestData();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->checkLeave($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
 	}
+	
+	/**
+	*	@url:		/Leaves/leavesSummary
+	*	@function:	To retrieve the leave details of the user
+	*	@type:		POST
+	*	@requestCode:
+	*	@in-params: staffId 
+	*	@responseCodes: LEAVE_SUMMARY_EXISTS: 191
+	*					LEAVE_SUMMARY_DOES_NOT_EXIST: 192
+	*	
+	*/
+	
 	public function leavesSummary()
 	{
-	   echo "leavesSummary";
-		//$request = $this->getRequestData();
-		$request = $this->createLeaveDummyRequest2();
-		
-		$this->setRequestCodeHeaderToResponse(501);
-		$this->load->model('LeaveModel');
-		$leavesData = $this->LeaveModel->leaveSummary($request->staffId);
-			if($leavesData != null)
-		{
-		    //var_dump($leaves);
-			$this->setResultCode(502);
-			$response["count"] = count($leavesData);
-			$response["leavesData"] = array();
-			$index = 0;
-			
-			foreach($leavesData as $leave)
-			{
-			    $response["leavesData"][$index]["count"] = $leave->count;
-			    $response["leavesData"][$index]["leaveStatus"] = $leave->leave_status;
-			    $index++;
-			}
-			//$response["msg"] = "You have these many leaves "; //.$attendance[0]->time_in;
-		}
-		
-		else
-		{
-		  	$this->setResultCode(503);
-			$response["count"] = 0; //.$attendance[0]->time_in;
-			
-		}
-		echo json_encode($response);
+		$request = $this->getRequestData();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('LeavesAPI');
+		$response = $this->leavesapi->leavesSummary($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
 	}
+	
+	
 	
 	
 	private function getRequestData()
@@ -141,35 +114,5 @@ class Leaves extends CI_Controller {
 		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
 	
-	/* creates dummy Leave request */
-	private function createLeaveDummyRequest()
-	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "300";
-		$request = array();
-		$request["staffId"] = 6;
-		$request["leaveDate"] = "2016-08-12";
- 		$request["leaveTypeID"] = 1;
-		
-		return Json_decode(json_encode($request));
-	}
-	private function createLeaveDummyRequest1()
-	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "400";
-		$request = array();
-		$request["staffId"] = 6;
-		$request["listLimit"] = 10;
- 		$request["status"] = 0; //completed , pending
-		return Json_decode(json_encode($request));
-		
-	}
-	private function createLeaveDummyRequest2()
-	{
-		$_SERVER[$this->TAG_REQUEST_CODE] = "500";
-		$request = array();
-		$request["staffId"] = 6;
-		
-		return Json_decode(json_encode($request));
-		
-	}
 	
 }
