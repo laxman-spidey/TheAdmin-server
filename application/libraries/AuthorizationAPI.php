@@ -47,6 +47,9 @@ class AuthorizationAPI {
 	    		file_get_contents("http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=abc&pwd=$password&to=919898123456&sid=senderid&msg=test%20message&fl=0");
 	
 	        	$generateOtp = $authorizationModel->otpGeneration( $request->phoneNumber,$password);
+				$smsString = "OTP to login to Register your mobile with TheAdmin App is: $password. Valid for 15 min.";
+
+	        	$this->sendSMS($request->phoneNumber, $smsString);
 	        	$response[TAG_RESULT_CODE] = CHECK_AUTHORIZATION_SUCCESS;
 				$data["msg"] = "You are authorized and otp will be sending ";
 			}
@@ -94,7 +97,7 @@ class AuthorizationAPI {
 			else
 			{
 				$response[TAG_RESULT_CODE] = VALIDATE_OTP_STATUS_UPDATE_FAIL;
-				$data["msg"] = "otp status updation failed. ";
+				$data["msg"] = "otp status update failed. ";
 			}
 
 		}
@@ -131,9 +134,32 @@ class AuthorizationAPI {
 			$response[TAG_RESULT_CODE] = USER_DATA_SUCCESS;
 			$data["userdata"] = array();
 				
-			$data["userdata"]["staff_id"] = $authorization[0]->staff_id;
-		    $data["userdata"]["phone_number"] = $authorization[0]->phone_number;
-		    $data["userdata"]["staff_name"] = $authorization[0]->staff_name;
+			$data["userdata"]["staffId"] = $authorization[0]->staff_id;
+		    $data["userdata"]["phoneNumber"] = $authorization[0]->phone_number;
+		    $data["userdata"]["firstName"] = $authorization[0]->first_name;
+		    $data["userdata"]["lastName"] = $authorization[0]->last_name;
+		    $data["userdata"]["staffRole"] = $authorization[0]->staff_role;
+		    $data["userdata"]["staffImage"] = $authorization[0]->staff_image;
+			// $path = $authorization[0]->staff_image;
+			// $path = '/home/ubuntu/workspace/TheAdmin-server/application/models/err.png';
+			// $type = pathinfo($path, PATHINFO_EXTENSION);
+			// $data1 = file_get_contents($path);
+			// $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data1);
+			//  //$base64 = base64_encode($data1);
+			//  echo $base64;
+			//  header("Content-type: image/gif");
+			// $data = "/9j/4AAQSkZJRgABAQEAYABgAAD........";
+			// echo base64_decode($data);
+			// 	echo base64_decode(base64_encode('/'.$data1));
+			 //echo '<img src="$base64 "/>';
+			  //echo '<img src="data:image/gif;base64,' . $data . '" />';
+			  //$imageData = base64_encode(file_get_contents($path));
+			  ////$src = 'data: '.mime_content_type($image).';base64,'.$imageData;
+			  //$src = 'data: ;base64,'.$imageData;
+			  //echo '<img src="', $src, '">';
+			  
+			// $data["userdata"]["staffImage"] = $src;
+		    $data["userdata"]["staffStatus"] = $authorization[0]->staff_status;
 		}
 		else
 		{
@@ -145,4 +171,31 @@ class AuthorizationAPI {
 		return $response;
 	}
 	
+	// function getDataURI($image, $mime = '') {
+	// return 'data: '.(function_exists('mime_content_type') ? mime_content_type($image) : $mime).';base64,'.base64_encode(file_get_contents($image));
+	// }
+	
+	public function sendSMS($phone, $msg)
+	{
+		$url = "http://sms1.brandebuzz.in/API/sms.php"; //http://www.smsstriker.com/API/sms.php?";
+        $data = array(
+            'username'=> 'APBSEL', //'ucdsyousee',
+            'password'=> 'APBSEL', //'SMS_for_UCDS',
+            'from'=>'YOUSEE',
+            'to'=> "$phone",
+            'msg'=>$msg,
+            'type'=>1
+        );
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+	//End of send SMS.
+
+	}
 }

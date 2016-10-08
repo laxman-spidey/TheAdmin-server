@@ -61,8 +61,16 @@ class Authorization extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->validateotp($request);
-		$response = $this->authorizationapi->userData($request);
-		$this->setResultCode($response[TAG_RESULT_CODE]);
+		if($response[TAG_RESULT_CODE] == LOGIN_SUCCESS)
+		{
+			$userData = $this->authorizationapi->userData($request);
+			$this->setResultCode($userData[TAG_RESULT_CODE]);
+			$response = $userData;
+		}
+		else 
+		{
+			$this->setResultCode($response[TAG_RESULT_CODE]);
+		}
 		echo json_encode($response["data"]);
 	}
 	

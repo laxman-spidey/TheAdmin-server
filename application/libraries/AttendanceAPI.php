@@ -31,9 +31,11 @@ class AttendanceAPI {
 	
     public function getAttendanceHistory($request)
     {
+    	$data = array();
+		$response = array();
 		$attendanceModel = $this->loadModel('AttendanceModel');
 		$history = null;
-		if(isset($request->from) && isset($request->to))
+		if(isset($request->fromDate) && isset($request->toDate))
 		{
 			$history = $attendanceModel->getHistory($request->staffId, $request->limit, $request->fromDate, $request->toDate);	
 		}
@@ -41,7 +43,6 @@ class AttendanceAPI {
 		{
 			$history = $attendanceModel->getHistory($request->staffId, $request->limit);
 		}
-		$data = array();
 		if($history == null)
 		{
 			$response[TAG_RESULT_CODE] = ATTENDANCE_HISTORY_NOT_EXIST;
@@ -80,6 +81,7 @@ class AttendanceAPI {
 	*	
 	*/
 	
+	
 	public function checkin($request)
 	{
 		$data = array();
@@ -104,7 +106,7 @@ class AttendanceAPI {
 					if($attendanceId > 0)
 					{
 						$response[TAG_RESULT_CODE] = CHECKIN_SUCCESS;
-						$data["msg"] = "Attendance registered Successfully.";
+						$data["msg"] = "Checked in Successfully.";
 					}
 					else
 					{

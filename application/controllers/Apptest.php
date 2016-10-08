@@ -38,7 +38,7 @@ class Apptest extends CI_Controller {
 		// $response = $this->attendance->getAttendanceHistory($request);
 		$response = $this->attendanceapi->getAttendanceHistory($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
-		$this->setSuccess($response["success"]);
+		// $this->setSuccess($response["success"]);
 		echo json_encode($response["data"]);
 	}	
 	
@@ -100,8 +100,16 @@ class Apptest extends CI_Controller {
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AuthorizationAPI');
 		$response = $this->authorizationapi->validateotp($request);
-		$response = $this->authorizationapi->userData($request);
-		$this->setResultCode($response[TAG_RESULT_CODE]);
+		if($response[TAG_RESULT_CODE] == LOGIN_SUCCESS)
+		{
+			$userData = $this->authorizationapi->userData($request);
+			$this->setResultCode($userData[TAG_RESULT_CODE]);
+			$response = $userData;
+		}
+		else 
+		{
+			$this->setResultCode($response[TAG_RESULT_CODE]);
+		}
 		echo json_encode($response["data"]);
 	}
 	
@@ -186,9 +194,9 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "100";
 		$request = array();
-		$request["staffId"] = 3;
+		$request["staffId"] = 1;
 		// $request["shiftId"] = 1;
-		$request["date"] = '2016-09-12';
+		$request["date"] = '2016-10-04';
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeIn"] = date("Y-m-d H:i:s");//"08:00:00";
 		//var_dump($request);
@@ -200,8 +208,8 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "110";
 		$request = array();
-		$request["staffId"] = 11;
-		$request["date"] = '2016-09-12';
+		$request["staffId"] = 1;
+		$request["date"] = '2016-10-04';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeOut"] = date("Y-m-d H:i:s");//"08:00:00";
@@ -213,10 +221,10 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "130";
 		$request = array();
-		$request["staffId"] = 7;
-		$request["limit"] = 3;
-		// $request["fromDate"] = '2016-08-01';
-		// $request["toDate"] = '2016-08-03';
+		$request["staffId"] = 1;
+		$request["limit"] = 10;
+		// $request["fromDate"] = '2016-10-01';
+		// $request["toDate"] = '2016-10-02';
 		
 		
 		var_dump($request);	
@@ -227,9 +235,9 @@ class Apptest extends CI_Controller {
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "120";
 		$request = array();
 		$request["staffId"] = 1;
-		$request["limit"] = 3;
-		// $request["fromDate"] = '2016-07-30';
-		// $request["toDate"] = '2016-09-21';
+		$request["limit"] = 10;
+		$request["fromDate"] = '2016-10-01';
+		$request["toDate"] = '2016-10-02';
 		
 		
 		// var_dump($request);	

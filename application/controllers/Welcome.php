@@ -46,7 +46,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->authorizationapi->getAttendanceHistory($request);
+		$response = $this->attendanceapi->getAttendanceHistory($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		// $this->setSuccess($response["success"]);
 		echo json_encode($response["data"]);
@@ -72,7 +72,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->authorizationapi->checkin($request);
+		$response = $this->attendanceapi->checkin($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
@@ -95,7 +95,7 @@ class Welcome extends CI_Controller {
 		$request = $this->getRequestData();
 		$this->setRequestCodeHeaderToResponse();
 		$this->load->library('AttendanceAPI');
-		$response = $this->authorizationapi->checkout($request);
+		$response = $this->attendanceapi->checkout($request);
 		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}

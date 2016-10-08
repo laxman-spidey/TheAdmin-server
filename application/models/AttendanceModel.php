@@ -16,7 +16,7 @@ class AttendanceModel extends CI_Model
                 
                 ;
         $query = $this->db->get();
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
         if($query->num_rows() > 0)
         {
             $roasterWeekOff = $query->result()[0];
@@ -37,7 +37,7 @@ class AttendanceModel extends CI_Model
                 
                 ;
         $query = $this->db->get();
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
         if($query->num_rows() > 0)
         {
             $attendance = $query->result()[0];
@@ -55,7 +55,7 @@ class AttendanceModel extends CI_Model
                         'roaster_id' => $roasterId,
                         'time_in' => $timein
             );
-        var_dump($data);
+        //var_dump($data);
         return $this->attendanceInsert($data);
     }
     
@@ -65,7 +65,7 @@ class AttendanceModel extends CI_Model
         $this->db->set('time_out', $timeout);
         $this->db->where('roaster_id',$roasterId);
         $success = $this->db->update('attendance',$data);
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
         if ($success == 1) 
         {
             return $this->db->affected_rows();
@@ -84,7 +84,7 @@ class AttendanceModel extends CI_Model
                         'time_out' => $timeout
                      );
         return $this->attendanceInsert($data);
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
     }
 
     
@@ -95,7 +95,7 @@ class AttendanceModel extends CI_Model
                 ->from("attendance")
                 ->where("roaster_id",$roasterId);
         $query = $this->db->get();
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
         if($query->num_rows() > 0)
         {
             $attendance = $query->result();
@@ -113,7 +113,7 @@ class AttendanceModel extends CI_Model
         
         $this->db->insert('attendance',$data);
         return $this->db->insert_id();
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
     }
     
 
@@ -133,7 +133,7 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        echo $this->db->last_query();
+        ////echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -157,7 +157,7 @@ class AttendanceModel extends CI_Model
                 ->order_by('date','desc')
                 ->limit($limit);
         
-        //echo $this->db->last_query();
+        ////echo $this->db->last_query();
         if($fromDate != null)
         {
             $this->db->where('date >=', $fromDate);
@@ -166,7 +166,7 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        //echo $this->db->last_query();
+        ////echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -176,7 +176,7 @@ class AttendanceModel extends CI_Model
         {
             $roasterDetails1 = null;
         }
-        //echo $this->db->last_query();
+        ////echo $this->db->last_query();
         return $roasterDetails1;
         
     } 
@@ -201,7 +201,7 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        // echo $this->db->last_query();
+        // //echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -211,7 +211,7 @@ class AttendanceModel extends CI_Model
         {
             $roasterDetails1 = null;
         }
-        //echo $this->db->last_query();
+        // //echo $this->db->last_query();
         return $roasterDetails1;
         
     }
