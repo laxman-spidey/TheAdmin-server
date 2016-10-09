@@ -133,7 +133,7 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        ////echo $this->db->last_query();
+        echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
@@ -154,10 +154,11 @@ class AttendanceModel extends CI_Model
                 ->join('shift s', 'r.shift_id = s.shift_id')
                 ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
                 ->where('staff_id', $staffId)
+                ->where('date >=','CURRENT_DATE')
                 ->order_by('date','desc')
                 ->limit($limit);
         
-        ////echo $this->db->last_query();
+        echo $this->db->last_query();
         if($fromDate != null)
         {
             $this->db->where('date >=', $fromDate);
@@ -176,7 +177,7 @@ class AttendanceModel extends CI_Model
         {
             $roasterDetails1 = null;
         }
-        ////echo $this->db->last_query();
+        //echo $this->db->last_query();
         return $roasterDetails1;
         
     } 
@@ -189,10 +190,11 @@ class AttendanceModel extends CI_Model
                 ->join('shift s', 'r.shift_id = s.shift_id')
                 ->join('attendance a', 'r.roaster_id = a.roaster_id','left')
                 ->join('leave l', 'r.staff_id = l.staff_id and  r.date = l. leave_date ','left outer')
-                ->where('r.date<=','date(DATE_ADD( NOW( ) , INTERVAL 3 DAY ))', FALSE)
+                // ->where('r.date','BETWEEN date(DATE_ADD(NOW(), INTERVAL -2 day)) AND date(DATE_ADD(NOW(), INTERVAL 2 day))')
+                ->where('r.date <=','date(DATE_ADD( NOW() , INTERVAL 3 DAY )) ')
                 ->where('r.staff_id', $staffId)
-                ->order_by('r.date','desc');
-                // ->limit($limit);
+                ->order_by('r.date','desc')
+                ->limit($limit);
         if($fromDate != null)
         {
             $this->db->where('date >=', $fromDate);
@@ -201,18 +203,18 @@ class AttendanceModel extends CI_Model
         {
             $this->db->where('date <=', $toDate);
         }
-        // //echo $this->db->last_query();
+        // echo $this->db->last_query();
         $query = $this->db->get();
         if($query->num_rows() > 0)
         {
-            $roasterDetails1 = $query->result();
+            $roasterDetails = $query->result();
         }
         else 
         {
-            $roasterDetails1 = null;
+            $roasterDetails = null;
         }
-        // //echo $this->db->last_query();
-        return $roasterDetails1;
+        // echo $this->db->last_query();
+        return $roasterDetails;
         
     }
 }

@@ -44,8 +44,6 @@ class AuthorizationAPI {
 	    		$string_shuffled = str_shuffle($string);
 	    		$password = substr($string_shuffled, 1, 6);
 	
-	    		file_get_contents("http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=abc&pwd=$password&to=919898123456&sid=senderid&msg=test%20message&fl=0");
-	
 	        	$generateOtp = $authorizationModel->otpGeneration( $request->phoneNumber,$password);
 				$smsString = "OTP to login to Register your mobile with TheAdmin App is: $password. Valid for 15 min.";
 
@@ -135,11 +133,11 @@ class AuthorizationAPI {
 			$data["userdata"] = array();
 				
 			$data["userdata"]["staffId"] = $authorization[0]->staff_id;
-		    $data["userdata"]["phoneNumber"] = $authorization[0]->phone_number;
+		    $data["userdata"]["phoneNumber"] = $authorization[0]->phone;
 		    $data["userdata"]["firstName"] = $authorization[0]->first_name;
 		    $data["userdata"]["lastName"] = $authorization[0]->last_name;
 		    $data["userdata"]["staffRole"] = $authorization[0]->staff_role;
-		    $data["userdata"]["staffImage"] = $authorization[0]->staff_image;
+		    $data["userdata"]["staffImage"] = $authorization[0]->image;
 			// $path = $authorization[0]->staff_image;
 			// $path = '/home/ubuntu/workspace/TheAdmin-server/application/models/err.png';
 			// $type = pathinfo($path, PATHINFO_EXTENSION);

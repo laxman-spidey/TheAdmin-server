@@ -14,7 +14,7 @@ class AuthorizationModel extends CI_Model
         $this->db->select("*")
                 ->from('staff')
                 // ->where('staff_id',$staffId)
-                ->where('phone_number',$phoneNumber)
+                ->where('phone',$phoneNumber)
                 ;
         $query = $this->db->get();
         if($query->num_rows() > 0)
@@ -37,7 +37,7 @@ class AuthorizationModel extends CI_Model
     {
         
         $this->db->set('otp_status', 'expired');
-        $this->db->where('phone_number',$phoneNumber)
+        $this->db->where('phone',$phoneNumber)
                 // ->where('otp',$otp)
                 ->where_in('otp_status','Generated');
         $expireOtp = $this->db->update('otp_log');
@@ -59,7 +59,7 @@ class AuthorizationModel extends CI_Model
         $this->db->select("*")
                 ->from('otp_log')
                 // ->where('staff_id',$staffId)
-                ->where('phone_number',$phoneNumber)
+                ->where('phone',$phoneNumber)
                 ->where('otp',$otp)
                 ->where('timestamp<','DATE_ADD(NOW(), INTERVAL 15 MINUTE)', FALSE)
                 ->where('otp_status','Generated')
@@ -87,7 +87,7 @@ class AuthorizationModel extends CI_Model
     {
         
         $this->db->set('otp_status', 'used');
-        $this->db->where('phone_number',$phoneNumber)
+        $this->db->where('phone',$phoneNumber)
                 ->where('otp',$otp)
                 ->where_in('otp_status',array('Generated','used'));
         $otpUpdation = $this->db->update('otp_log');
@@ -108,7 +108,7 @@ class AuthorizationModel extends CI_Model
     public function otpGeneration( $phoneNumber, $password)
     {
         //$password = "123456";
-        $query ="select staff_id from staff where phone_number=$phoneNumber";
+        $query ="select staff_id from staff where phone=$phoneNumber";
         $query = $this->db->query($query);
         foreach ($query->result() as $row)  
         {// $staffId this will be a row.. not a value directly..
@@ -118,7 +118,7 @@ class AuthorizationModel extends CI_Model
         $data = array(
                         'staff_id' => $staffId ,
                         // 'staff_id' => $query->result() ,
-                        'phone_number' => $phoneNumber,
+                        'phone' => $phoneNumber,
                         'otp' => $password
         );
             //var_dump($data);
