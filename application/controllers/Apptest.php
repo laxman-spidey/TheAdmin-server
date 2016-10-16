@@ -110,6 +110,7 @@ class Apptest extends CI_Controller {
 		{
 			$this->setResultCode($response[TAG_RESULT_CODE]);
 		}
+		$this->setResultCode($response[TAG_RESULT_CODE]);
 		echo json_encode($response["data"]);
 	}
 	
@@ -196,7 +197,7 @@ class Apptest extends CI_Controller {
 		$request = array();
 		$request["staffId"] = 1;
 		// $request["shiftId"] = 1;
-		$request["date"] = '2016-10-04';
+		$request["date"] = '2016-10-09';
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeIn"] = date("Y-m-d H:i:s");//"08:00:00";
 		//var_dump($request);
@@ -209,7 +210,7 @@ class Apptest extends CI_Controller {
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "110";
 		$request = array();
 		$request["staffId"] = 1;
-		$request["date"] = '2016-10-04';
+		$request["date"] = '2016-10-09';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
 		$request["timeOut"] = date("Y-m-d H:i:s");//"08:00:00";
@@ -222,7 +223,7 @@ class Apptest extends CI_Controller {
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "130";
 		$request = array();
 		$request["staffId"] = 1;
-		$request["limit"] = 10;
+		$request["limit"] = 5;
 		// $request["fromDate"] = '2016-10-01';
 		// $request["toDate"] = '2016-10-02';
 		
@@ -236,8 +237,8 @@ class Apptest extends CI_Controller {
 		$request = array();
 		$request["staffId"] = 1;
 		$request["limit"] = 10;
-		$request["fromDate"] = '2016-10-01';
-		$request["toDate"] = '2016-10-02';
+		// $request["fromDate"] = '2016-10-01';
+		// $request["toDate"] = '2016-10-02';
 		
 		
 		// var_dump($request);	
@@ -258,7 +259,7 @@ class Apptest extends CI_Controller {
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "160";
 		$request = array();
 		$request["phoneNumber"] = 9505878984;
-		$request["otp"] = 123456;
+		$request["otp"] = 168405;
 		return Json_decode(json_encode($request));
 		
 	}

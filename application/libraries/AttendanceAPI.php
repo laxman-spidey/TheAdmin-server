@@ -167,7 +167,7 @@ class AttendanceAPI {
 					else
 					{
 						$response[TAG_RESULT_CODE] = CHECKOUT_INSERT_DBERROR;
-						$data["msg"] = "checked out failed.Please try again later";
+						$data["msg"] = "check out failed.Please try again later";
 					}
 				}
 				else
