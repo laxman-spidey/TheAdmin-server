@@ -113,7 +113,8 @@ class Authorization extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
+		header("".TAG_RESULT_CODE.": " . $resultCode . "");
+		//$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
 	}
 		
 
