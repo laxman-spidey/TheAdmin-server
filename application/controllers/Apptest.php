@@ -195,7 +195,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "100";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 268;
 		// $request["shiftId"] = 1;
 		$request["date"] = '2016-10-09';
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -209,7 +209,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "110";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 268;
 		$request["date"] = '2016-10-09';
 		// $request["shiftId"] = 1;
 		// $request["date"] = date("Y-m-d"); //"00-00-0000";
@@ -222,7 +222,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "130";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 268;
 		$request["limit"] = 5;
 		// $request["fromDate"] = '2016-10-01';
 		// $request["toDate"] = '2016-10-02';
@@ -235,7 +235,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "120";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 268;
 		$request["limit"] = 10;
 		// $request["fromDate"] = '2016-10-01';
 		// $request["toDate"] = '2016-10-02';
@@ -259,7 +259,7 @@ class Apptest extends CI_Controller {
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "160";
 		$request = array();
 		$request["phoneNumber"] = 9505878984;
-		$request["otp"] = 168405;
+		$request["otp"] = 971304;
 		return Json_decode(json_encode($request));
 		
 	}
@@ -278,7 +278,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "170";
 		$request = array();
-		$request["staffId"] = 1;
+		$request["staffId"] = 268;
 		$request["leaveDate"] = "2016-09-21";
  		$request["leaveTypeID"] = 1;
 		
@@ -289,7 +289,7 @@ class Apptest extends CI_Controller {
 	{
 		$_SERVER[$this->TAG_HTTP_REQUEST_CODE] = "180";
 		$request = array();
-		$request["staffId"] = 10;
+		$request["staffId"] = 2680;
 		$request["listLimit"] = 10;
  		$request["status"] = 0; //completed , pending
 		return Json_decode(json_encode($request));
@@ -358,7 +358,7 @@ class Apptest extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		$this->output->set_header(''.$this->TAG_RESULT_CODE .': '. $resultCode .'');
+		header("$this->TAG_RESULT_CODE: " . $resultCode  . "");
 		
 	}
 	
