@@ -42,6 +42,16 @@ class Authorization extends CI_Controller {
 		echo json_encode($response["data"]);
 	}
 	
+	public function verifyPhoneDebug()
+	{
+		$request = $this->getRequestData();
+		$this->setRequestCodeHeaderToResponse();
+		$this->load->library('AuthorizationAPI');
+		$response = $this->authorizationapi->verifyPhone($request);
+		$this->setResultCode($response[TAG_RESULT_CODE]);
+		echo json_encode($response["data"]);
+	}
+	
 	 /**
 	*	@url:		/Authorization/validateotp
 	*	@function:  To validate the login credentials of user , retrieves the user data and updates the Otp status if valid
@@ -113,8 +123,7 @@ class Authorization extends CI_Controller {
 	}
 	private function setResultCode($resultCode)
 	{				
-		header("".TAG_RESULT_CODE.": " . $resultCode . "");
-		//$this->output->set_header(''.TAG_RESULT_CODE .': '. $resultCode .'');
+		header("".TAG_RESULT_CODE.": " . $resultCode  . "");
 	}
 		
 
